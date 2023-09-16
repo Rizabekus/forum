@@ -218,13 +218,22 @@ func Create(w http.ResponseWriter, r *http.Request) {
 		ErrorHandler(w, http.StatusMethodNotAllowed)
 		return
 	}
-
-	tmpl, err := template.ParseFiles("./ui/html/create.html")
+	cookie, err := r.Cookie("logged-in")
 	if err != nil {
-		log.Println(err.Error())
+		ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
-	tmpl.Execute(w, nil)
+	if cookie.Value == "not-logged" {
+		http.Redirect(w, r, "/signup", 302)
+	} else {
+
+		tmpl, err := template.ParseFiles("./ui/html/create.html")
+		if err != nil {
+			log.Println(err.Error())
+			return
+		}
+		tmpl.Execute(w, nil)
+	}
 }
 
 func PostConfirmation(w http.ResponseWriter, r *http.Request) {
@@ -232,16 +241,28 @@ func PostConfirmation(w http.ResponseWriter, r *http.Request) {
 		ErrorHandler(w, http.StatusMethodNotAllowed)
 		return
 	}
-	title := r.FormValue("title")
-	text := r.FormValue("convert")
-	cat := r.FormValue("cars")
 	cookie, err := r.Cookie("logged-in")
 	if err != nil {
 		ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
-	internal.CreatePost(cookie.Value, text, cat, title)
-	http.Redirect(w, r, "/", 302)
+
+	title := r.FormValue("title")
+	text := r.FormValue("convert")
+	cat := r.FormValue("cars")
+	checker, t := internal.PostChecker(title, text)
+	if checker == false {
+		tmpl, err := template.ParseFiles("./ui/html/create.html")
+		if err != nil {
+			ErrorHandler(w, http.StatusInternalServerError)
+			return
+		}
+		tmpl.Execute(w, t)
+	} else {
+
+		internal.CreatePost(cookie.Value, text, cat, title)
+		http.Redirect(w, r, "/", 302)
+	}
 }
 
 func PostPage(w http.ResponseWriter, r *http.Request) {
@@ -258,6 +279,7 @@ func PostPage(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(xurl[1])
 	if err != nil {
 		ErrorHandler(w, http.StatusNotFound)
+		return
 	}
 	db, err := sql.Open("sqlite3", "./sql/database.db")
 	if err != nil {
@@ -324,38 +346,47 @@ func CommentConfirmation(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(http.StatusText(http.StatusMethodNotAllowed)))
 		return
 	}
-	text := r.FormValue("comment")
-	previousURL := r.Header.Get("Referer")
-
-	xurl := strings.Split(previousURL, "id=")
-	if len(xurl) < 2 {
-		w.WriteHeader(http.StatusNotFound)
-		return
-	}
-
-	id, err := strconv.Atoi(xurl[1])
-	if err != nil {
-		w.WriteHeader(http.StatusNotFound)
-	}
-	db, err := sql.Open("sqlite3", "./sql/database.db")
-	if err != nil {
-		ErrorHandler(w, http.StatusInternalServerError)
-		return
-	}
 	cookie, err := r.Cookie("logged-in")
-	st, err := db.Query("SELECT lame FROM cookies WHERE Id=(?)", cookie.Value)
 	if err != nil {
 		ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
-	var name string
-	for st.Next() {
-		st.Scan(&name)
-	}
-	st.Close()
+	if cookie.Value == "not-logged" {
+		http.Redirect(w, r, "http://127.0.0.1:8000/signin?", 302)
+	} else {
+		text := r.FormValue("comment")
+		previousURL := r.Header.Get("Referer")
 
-	internal.AddComment(name, text, id, db)
-	http.Redirect(w, r, previousURL, 302)
+		xurl := strings.Split(previousURL, "id=")
+		if len(xurl) < 2 {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+
+		id, err := strconv.Atoi(xurl[1])
+		if err != nil {
+			w.WriteHeader(http.StatusNotFound)
+		}
+		db, err := sql.Open("sqlite3", "./sql/database.db")
+		if err != nil {
+			ErrorHandler(w, http.StatusInternalServerError)
+			return
+		}
+
+		st, err := db.Query("SELECT lame FROM cookies WHERE Id=(?)", cookie.Value)
+		if err != nil {
+			ErrorHandler(w, http.StatusInternalServerError)
+			return
+		}
+		var name string
+		for st.Next() {
+			st.Scan(&name)
+		}
+		st.Close()
+
+		internal.AddComment(name, text, id, db)
+		http.Redirect(w, r, previousURL, 302)
+	}
 }
 
 func Filter(w http.ResponseWriter, r *http.Request) {

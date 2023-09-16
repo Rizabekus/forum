@@ -10,19 +10,24 @@
 <body>
   <div class="container3">
     <div class="login-box">
+      <a href="http://127.0.0.1:8000/">Home</a>
+      
+      
       <h1>Login Page</h1>
       <p>{{.}}</p>
       <form action="/signinconfirmation" method="post">
         <div class="input-group">
           <p>Name</p>
-          <input type="text" name="UserName">
+          <input type="text" name="UserName" maxlength="30">
         </div>
         <div class="input-group">
           <p>Password</p>
-          <input type="password" name="UserPassword">
+          <input type="password" name="UserPassword" maxlength="40">
         </div>
         <button type="submit">Send</button>
       </form>
+      <br>
+      <a href="http://127.0.0.1:8000/">Sign up</a>
     </div>
   </div>
 <body>
