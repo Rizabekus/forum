@@ -1,9 +1,10 @@
-package web
+package controllers
 
 import (
 	"database/sql"
 	"fmt"
-	"forum/internal"
+	"forum/internal/models"
+	"forum/internal/repository"
 	"log"
 	"net/http"
 	"strconv"
@@ -44,7 +45,7 @@ func Homepage(w http.ResponseWriter, r *http.Request) {
 			ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
-		tmpl.Execute(w, internal.ShowPost())
+		tmpl.Execute(w, repository.ShowPost())
 	} else if err != nil {
 		ErrorHandler(w, http.StatusInternalServerError)
 		return
@@ -93,7 +94,7 @@ func Homepage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		db.Close()
-		tmpl.Execute(w, internal.ShowPost())
+		tmpl.Execute(w, repository.ShowPost())
 
 	}
 }
@@ -122,7 +123,7 @@ func SignUpConfirmation(w http.ResponseWriter, r *http.Request) {
 	password := r.FormValue("UserPassword")
 	rewrittenPassword := r.FormValue("UserRewrittenPassword")
 
-	result, text := internal.ConfirmSignup(name, email, password, rewrittenPassword)
+	result, text := models.ConfirmSignup(name, email, password, rewrittenPassword)
 	if result == true {
 
 		pwd, err := bcrypt.GenerateFromPassword([]byte(password), 1)
@@ -135,7 +136,7 @@ func SignUpConfirmation(w http.ResponseWriter, r *http.Request) {
 			ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
-		internal.AddUser(name, email, string(pwd), db)
+		repository.AddUser(name, email, string(pwd), db)
 
 		http.Redirect(w, r, "/signin", 302)
 	} else {
@@ -168,7 +169,7 @@ func SignInConfirmation(w http.ResponseWriter, r *http.Request) {
 	}
 	name := r.FormValue("UserName")
 	password := r.FormValue("UserPassword")
-	result, text := internal.ConfirmSignin(name, password)
+	result, text := models.ConfirmSignin(name, password)
 	if result == true {
 		u1, err := uuid.NewV4()
 		if err != nil {
@@ -182,7 +183,7 @@ func SignInConfirmation(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer db.Close()
-		internal.CreateSession(u2, name, db)
+		repository.CreateSession(u2, name, db)
 
 		cookie := &http.Cookie{Name: "logged-in", Value: u2, Expires: time.Now().Add(365 * 24 * time.Hour)}
 		http.SetCookie(w, cookie)

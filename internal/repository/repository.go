@@ -1,8 +1,9 @@
-package internal
+package repository
 
 import (
 	"database/sql"
 	"fmt"
+	"forum/internal/models"
 	"log"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -79,10 +80,7 @@ func DeleteCookie(cookie string, db *sql.DB) {
 }
 
 func AddComment(name, text string, id int, db *sql.DB) {
-	i, err := db.Query("SELECT count(*) from comments where id = (?)", id)
-	if err != nil {
-		log.Fatal(err)
-	}
+	i, err := db.models
 	var count int
 	defer i.Close()
 	for i.Next() {
@@ -110,8 +108,8 @@ func AddComment(name, text string, id int, db *sql.DB) {
 	db.Close()
 }
 
-func CollectComments(id int, db *sql.DB) []Comment {
-	var result []Comment
+func CollectComments(id int, db *sql.DB) []models.Comment {
+	var result []models.Comment
 	var name string
 	var text string
 	st, err := db.Query("SELECT Name, Text, Comid FROM comments WHERE Id=(?)", id)

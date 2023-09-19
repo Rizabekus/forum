@@ -1,4 +1,4 @@
-DROP DATABASE IF EXISTS database.db
+-- DROP DATABASE IF EXISTS database.db
 
 CREATE TABLE users(
     Name VARCHAR(30) NOT NULL,
