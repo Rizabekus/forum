@@ -8,5 +8,4 @@ type Post struct {
 	Id       int
 	Likes    int
 	Dislikes int
-	// Comments [string]string
 }
