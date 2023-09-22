@@ -11,3 +11,11 @@ type ErrorStruct struct {
 	Status  int
 	Message string
 }
+
+type UserService interface{}
+
+type (
+	PostService          interface{}
+	CommentService       interface{}
+	LikesDislikesService interface{}
+)
