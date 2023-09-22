@@ -1,4 +1,4 @@
-package repository
+package repo
 
 import (
 	"database/sql"
@@ -7,6 +7,12 @@ import (
 	"log"
 
 	_ "github.com/mattn/go-sqlite3"
+)
+
+type (
+	UserRepository          interface{}
+	PostRepository          interface{}
+	LikesdislikesRepository interface{}
 )
 
 func AddUser(UserName string, Email string, hashedPassword string, db *sql.DB) {
