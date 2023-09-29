@@ -10,5 +10,11 @@ func Run() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	Server()
 	defer db.Close()
+}
+
+type application struct {
+	errorLog *log.Logger
+	infoLog  *log.Logger
 }
