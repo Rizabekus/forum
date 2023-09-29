@@ -3,11 +3,12 @@ package app
 import (
 	"fmt"
 	"forum/internal/controllers"
+	"forum/internal/services"
 	"log"
 	"net/http"
 )
 
-func Server() {
+func Server(c Controllers) {
 	mux := http.NewServeMux()
 	files := http.FileServer(http.Dir("./templates"))
 	mux.Handle("/templates/", http.StripPrefix("/templates", files))
@@ -31,4 +32,8 @@ func Server() {
 	fmt.Println("http://127.0.0.1:8000")
 	err := http.ListenAndServe(":8000", mux)
 	log.Fatal(err)
+}
+
+type Controllers struct {
+	Service services.Service
 }
