@@ -31,15 +31,25 @@ type Post struct {
 }
 
 type (
-	UserService          interface{}
-	PostService          interface{}
+	UserService interface{}
+	PostService interface {
+		ShowPost() []Post
+	}
 	CommentService       interface{}
 	LikesDislikesService interface{}
 )
 
 type (
-	UserRepository          interface{}
-	PostRepository          interface{}
-	CommentRepository       interface{}
+	UserRepository interface {
+		AddUser(UserName string, Email string, hashedPassword string)
+	}
+	PostRepository interface {
+		ShowPost() []Post
+		CreatePost(cookie string, text string, category string, title string)
+	}
+	CommentRepository interface {
+		AddComment(name, text string, id int)
+		CollectComments(id int) []Comment
+	}
 	LikesDislikesRepository interface{}
 )

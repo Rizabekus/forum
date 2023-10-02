@@ -10,7 +10,7 @@ func DeleteCookie(cookie string, db *sql.DB) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, err = db.Exec("DELETE FROM cookies WHERE Id=(?)", cookie)
+	_, err = db.Exec("DELETE * FROM cookies WHERE Id=(?)", cookie)
 	if err != nil {
 		log.Fatal(err)
 	}

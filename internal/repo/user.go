@@ -13,7 +13,7 @@ func CreateUserRepository(db *sql.DB) *UserDB {
 	return &UserDB{DB: db}
 }
 
-func (UserDB *UserDB) AddUser(UserName string, Email string, hashedPassword string, db *sql.DB) {
+func (UserDB *UserDB) AddUser(UserName string, Email string, hashedPassword string) {
 	statement, err := UserDB.DB.Prepare("INSERT INTO users (Name, Email,Password) VALUES (?, ?, ?)")
 	if err != nil {
 		log.Fatal(err)

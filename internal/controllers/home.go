@@ -9,11 +9,11 @@ import (
 
 func (controllers *Controllers) Homepage(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		ErrorHandler(w, http.StatusMethodNotAllowed)
+		controllers.ErrorHandler(w, http.StatusMethodNotAllowed)
 		return
 	}
 	if r.URL.Path != "/" {
-		ErrorHandler(w, http.StatusNotFound)
+		controllers.ErrorHandler(w, http.StatusNotFound)
 		return
 	}
 
@@ -33,23 +33,21 @@ func (controllers *Controllers) Homepage(w http.ResponseWriter, r *http.Request)
 
 		tmpl, err := template.ParseFiles(files...)
 		if err != nil {
-			ErrorHandler(w, http.StatusInternalServerError)
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
-		tmpl.Execute(w, repository.ShowPost())
+		tmpl.Execute(w, controllers.Service.PostService.ShowPost())
 	} else if err != nil {
-		ErrorHandler(w, http.StatusInternalServerError)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	} else {
 		if time.Now().After(cookie.Expires) {
+			// DeleteByID
 			db, err := sql.Open("sqlite3", "./sql/database.db")
-			if err != nil {
-				ErrorHandler(w, http.StatusInternalServerError)
-				return
-			}
+
 			tx, err := db.Begin()
 			if err != nil {
-				ErrorHandler(w, http.StatusInternalServerError)
+				controllers.ErrorHandler(w, http.StatusInternalServerError)
 				return
 			}
 			db.Exec("Delete * from cookies where Id = ( ? )", cookie.Value)
@@ -64,10 +62,10 @@ func (controllers *Controllers) Homepage(w http.ResponseWriter, r *http.Request)
 		c := cookie.Value
 		db, err := sql.Open("sqlite3", "./sql/database.db")
 		var name string
-
+		// SelectUserByID
 		Name, err := db.Query("SELECT lame FROM cookies WHERE Id = ( ? )", c)
 		if err != nil {
-			ErrorHandler(w, http.StatusInternalServerError)
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
 		defer Name.Close()
@@ -81,11 +79,11 @@ func (controllers *Controllers) Homepage(w http.ResponseWriter, r *http.Request)
 		}
 		tmpl, err := template.ParseFiles(files...)
 		if err != nil {
-			ErrorHandler(w, http.StatusInternalServerError)
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
 		db.Close()
-		tmpl.Execute(w, repository.ShowPost())
+		tmpl.Execute(w, controllers.Service.PostService.ShowPost())
 
 	}
 }
