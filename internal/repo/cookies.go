@@ -17,3 +17,9 @@ func DeleteCookie(cookie string, db *sql.DB) {
 	tx.Commit()
 	db.Close()
 }
+
+func SetCookie() {
+}
+
+func GetCookie() {
+}

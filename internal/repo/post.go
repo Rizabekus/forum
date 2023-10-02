@@ -2,6 +2,7 @@ package repo
 
 import (
 	"database/sql"
+	"forum/internal/models"
 	"log"
 )
 
@@ -13,17 +14,14 @@ func CreatePostRepository(db *sql.DB) *PostDB {
 	return &PostDB{DB: db}
 }
 
-func ShowPost() []Post {
-	var posts []Post
-	db, err := sql.Open("sqlite3", "./sql/database.db")
+func (db *PostDB) ShowPost() []models.Post {
+	var posts []models.Post
+
+	tx, err := db.DB.Begin()
 	if err != nil {
 		log.Fatal(err)
 	}
-	tx, err := db.Begin()
-	if err != nil {
-		log.Fatal(err)
-	}
-	row, err := db.Query("SELECT * FROM posts")
+	row, err := db.DB.Query("SELECT * FROM posts")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -37,15 +35,15 @@ func ShowPost() []Post {
 	defer row.Close()
 	for row.Next() {
 		row.Scan(&title, &t, &n, &c, &i)
-		err := db.QueryRow("SELECT count(*) FROM likes WHERE Postid=(?)", i).Scan(&likes)
+		err := db.DB.QueryRow("SELECT count(*) FROM likes WHERE Postid=(?)", i).Scan(&likes)
 		if err != nil {
 			log.Fatal(err)
 		}
-		err = db.QueryRow("SELECT count(*) FROM dislikes WHERE Postid=(?)", i).Scan(&dislikes)
+		err = db.DB.QueryRow("SELECT count(*) FROM dislikes WHERE Postid=(?)", i).Scan(&dislikes)
 		if err != nil {
 			log.Fatal(err)
 		}
-		onepost := Post{
+		onepost := models.Post{
 			Title:    title,
 			Text:     t,
 			Name:     n,
@@ -59,13 +57,12 @@ func ShowPost() []Post {
 	}
 
 	tx.Commit()
-	db.Close()
+	db.DB.Close()
 	return posts
 }
 
-func CreatePost(cookie string, text string, category string, title string) {
-	db, err := sql.Open("sqlite3", "./sql/database.db")
-	Name, err := db.Query("SELECT lame FROM cookies WHERE Id = ( ? )", cookie)
+func (db *PostDB) CreatePost(cookie string, text string, category string, title string) {
+	Name, err := db.DB.Query("SELECT lame FROM cookies WHERE Id = ( ? )", cookie)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -77,21 +74,21 @@ func CreatePost(cookie string, text string, category string, title string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	tx, err := db.Begin()
+	tx, err := db.DB.Begin()
 	if err != nil {
 		log.Fatal(err)
 	}
-	Flag, err := db.Query("SELECT count(*) FROM posts")
+	Flag, err := db.DB.Query("SELECT count(*) FROM posts")
 	defer Flag.Close()
 	var flag int
 	for Flag.Next() {
 		Flag.Scan(&flag)
 	}
 
-	_, err = db.Exec("INSERT INTO posts (Title,Post,Namae,Category,Id) VALUES (?, ?, ?, ?, ? )", title, text, name, category, flag+1)
+	_, err = db.DB.Exec("INSERT INTO posts (Title,Post,Namae,Category,Id) VALUES (?, ?, ?, ?, ? )", title, text, name, category, flag+1)
 	if err != nil {
 		log.Fatal(err)
 	}
 	tx.Commit()
-	db.Close()
+	db.DB.Close()
 }

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"forum/internal/models"
 	"net/http"
 	"text/template"
 )
@@ -14,7 +15,7 @@ func (controllers *Controllers) ErrorHandler(w http.ResponseWriter, status int) 
 		w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
 		return
 	}
-	var Err internal.ErrorStruct
+	var Err models.ErrorStruct
 	Err.Message = http.StatusText(status)
 	Err.Status = status
 	err = tmp.Execute(w, Err)

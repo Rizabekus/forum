@@ -13,12 +13,26 @@ func CreateUserRepository(db *sql.DB) *UserDB {
 	return &UserDB{DB: db}
 }
 
-func AddUser(UserName string, Email string, hashedPassword string, db *sql.DB) {
-	statement, err := db.Prepare("INSERT INTO users (Name, Email,Password) VALUES (?, ?, ?)")
+func (UserDB *UserDB) AddUser(UserName string, Email string, hashedPassword string, db *sql.DB) {
+	statement, err := UserDB.DB.Prepare("INSERT INTO users (Name, Email,Password) VALUES (?, ?, ?)")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	statement.Exec(UserName, Email, hashedPassword)
-	db.Close()
+	UserDB.DB.Close()
+}
+
+func (UserDB *UserDB) CreateSession(id, name string) {
+	tx, err := UserDB.DB.Begin()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = UserDB.DB.Exec("INSERT INTO cookies (Id, lame) VALUES (?, ?)", id, name)
+	if err != nil {
+		log.Fatal(err)
+	}
+	tx.Commit()
+	UserDB.DB.Close()
 }

@@ -16,7 +16,7 @@ func (controllers *Controllers) CommentConfirmation(w http.ResponseWriter, r *ht
 	}
 	cookie, err := r.Cookie("logged-in")
 	if err != nil {
-		ErrorHandler(w, http.StatusInternalServerError)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
 	if cookie.Value == "not-logged" {

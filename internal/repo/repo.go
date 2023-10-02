@@ -11,7 +11,7 @@ func RepositoryInstance(db *sql.DB) *Repository {
 	return &Repository{
 		UserRepository:          CreateUserRepository(db),
 		PostRepository:          CreatePostRepository(db),
-		CommentsReepository:     CreateCommentsRepository(db),
+		CommentRepository:       CreateCommentRepository(db),
 		LikesdislikesRepository: CreateLikesdislikesRepository(db),
 	}
 }
@@ -19,7 +19,7 @@ func RepositoryInstance(db *sql.DB) *Repository {
 type Repository struct {
 	UserRepository          models.UserRepository
 	PostRepository          models.PostRepository
-	CommentsReepository     models.CommentsReepository
+	CommentRepository       models.CommentRepository
 	LikesdislikesRepository models.LikesdislikesRepository
 }
 

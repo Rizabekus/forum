@@ -23,7 +23,7 @@ func (controllers *Controllers) Filter(w http.ResponseWriter, r *http.Request) {
 
 	Name, err := db.Query("SELECT lame FROM cookies WHERE Id = ( ? )", cc)
 	if err != nil {
-		ErrorHandler(w, http.StatusInternalServerError)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
 	defer Name.Close()

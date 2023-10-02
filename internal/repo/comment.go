@@ -11,7 +11,7 @@ type CommentDB struct {
 	DB *sql.DB
 }
 
-func CreateCommentsRepository(db *sql.DB) *CommentDB {
+func CreateCommentRepository(db *sql.DB) *CommentDB {
 	return &CommentDB{DB: db}
 }
 
@@ -65,7 +65,7 @@ func (db *CommentDB) CollectComments(id int) []models.Comment {
 		if err != nil {
 			log.Fatal(err)
 		}
-		x := Comment{
+		x := models.Comment{
 			Name:     name,
 			Text:     text,
 			Comid:    comid,

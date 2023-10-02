@@ -21,7 +21,7 @@ func Server(c *controllers.Controllers) {
 	mux.HandleFunc("/comments", c.PostPage)
 	mux.HandleFunc("/postconfirmation", c.PostConfirmation)
 	mux.HandleFunc("/commentconfirmation", c.CommentConfirmation)
-	mux.HandleFunc("/create", c.Create)
+	mux.HandleFunc("/create", c.CreatePost)
 	mux.HandleFunc("/like", c.Likes)
 	mux.HandleFunc("/dislike", c.Dislikes)
 	mux.HandleFunc("/filter", c.Filter)

@@ -7,19 +7,19 @@ import (
 
 func (controllers *Controllers) Dislikes(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		ErrorHandler(w, http.StatusMethodNotAllowed)
+		controllers.ErrorHandler(w, http.StatusMethodNotAllowed)
 		return
 	}
 	id := r.FormValue("id")
 
 	db, err := sql.Open("sqlite3", "./sql/database.db")
 	if err != nil {
-		ErrorHandler(w, http.StatusInternalServerError)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
 	cookie, err := r.Cookie("logged-in")
 	if err != nil {
-		ErrorHandler(w, http.StatusInternalServerError)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
 	var checkName string
@@ -30,7 +30,7 @@ func (controllers *Controllers) Dislikes(w http.ResponseWriter, r *http.Request)
 	row.Close()
 	db, err = sql.Open("sqlite3", "./sql/database.db")
 	if err != nil {
-		ErrorHandler(w, http.StatusInternalServerError)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
 
@@ -60,14 +60,14 @@ func (controllers *Controllers) Dislikes(w http.ResponseWriter, r *http.Request)
 
 		tx, err := db.Begin()
 		if err != nil {
-			ErrorHandler(w, http.StatusInternalServerError)
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
 
 		_, err = db.Exec("INSERT INTO dislikes (Name, Postid) VALUES (?, ?)", checkName, id)
 		_, err = db.Exec("DELETE FROM likes WHERE Name=(?) and Postid = (?)", checkName, id)
 		if err != nil {
-			ErrorHandler(w, http.StatusInternalServerError)
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
 		tx.Commit()
@@ -75,14 +75,14 @@ func (controllers *Controllers) Dislikes(w http.ResponseWriter, r *http.Request)
 	} else if checklikes == false && checkdislikes == false {
 		tx, err := db.Begin()
 		if err != nil {
-			ErrorHandler(w, http.StatusInternalServerError)
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
 
 		_, err = db.Exec("INSERT INTO dislikes (Name, Postid) VALUES (?, ?)", checkName, id)
 
 		if err != nil {
-			ErrorHandler(w, http.StatusInternalServerError)
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
 		tx.Commit()
@@ -90,14 +90,14 @@ func (controllers *Controllers) Dislikes(w http.ResponseWriter, r *http.Request)
 	} else if checklikes == false && checkdislikes == true {
 		tx, err := db.Begin()
 		if err != nil {
-			ErrorHandler(w, http.StatusInternalServerError)
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
 
 		_, err = db.Exec("DELETE FROM dislikes WHERE Name=(?) and Postid=(?)", checkName, id)
 
 		if err != nil {
-			ErrorHandler(w, http.StatusInternalServerError)
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
 		tx.Commit()

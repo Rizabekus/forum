@@ -21,6 +21,10 @@ func ServiceInstance(repo *repo.Repository) *Services {
 	}
 }
 
+type CommentService struct {
+	repo *repo.Repository
+}
+
 func CreateCommentService(repo *models.CommentRepository) *models.CommentService {
 	return &models.CommentService{repo: repo}
 }

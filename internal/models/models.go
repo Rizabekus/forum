@@ -40,6 +40,6 @@ type (
 type (
 	UserRepository          interface{}
 	PostRepository          interface{}
-	CommentsReepository     interface{}
+	CommentRepository       interface{}
 	LikesdislikesRepository interface{}
 )
