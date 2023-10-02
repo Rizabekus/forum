@@ -8,7 +8,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func SignUpConfirmation(w http.ResponseWriter, r *http.Request) {
+func (controllers *Controllers) SignUpConfirmation(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		ErrorHandler(w, http.StatusMethodNotAllowed)
 		return

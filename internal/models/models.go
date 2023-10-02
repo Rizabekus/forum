@@ -12,14 +12,6 @@ type ErrorStruct struct {
 	Message string
 }
 
-type UserService interface{}
-
-type (
-	PostService          interface{}
-	CommentService       interface{}
-	LikesDislikesService interface{}
-)
-
 type Comment struct {
 	Name     string
 	Text     string
@@ -37,3 +29,17 @@ type Post struct {
 	Likes    int
 	Dislikes int
 }
+
+type (
+	UserService          interface{}
+	PostService          interface{}
+	CommentService       interface{}
+	LikesDislikesService interface{}
+)
+
+type (
+	UserRepository          interface{}
+	PostRepository          interface{}
+	CommentsReepository     interface{}
+	LikesdislikesRepository interface{}
+)

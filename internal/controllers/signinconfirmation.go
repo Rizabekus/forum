@@ -9,7 +9,7 @@ import (
 	"github.com/gofrs/uuid"
 )
 
-func SignInConfirmation(w http.ResponseWriter, r *http.Request) {
+func (controllers *Controllers) SignInConfirmation(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		ErrorHandler(w, http.StatusMethodNotAllowed)
 		return

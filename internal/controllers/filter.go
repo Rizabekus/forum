@@ -7,7 +7,7 @@ import (
 	"text/template"
 )
 
-func Filter(w http.ResponseWriter, r *http.Request) {
+func (controllers *Controllers) Filter(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 
 		w.Header().Set("Allow", http.MethodPost)

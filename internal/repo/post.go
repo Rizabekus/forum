@@ -5,6 +5,14 @@ import (
 	"log"
 )
 
+type PostDB struct {
+	DB *sql.DB
+}
+
+func CreatePostRepository(db *sql.DB) *PostDB {
+	return &PostDB{DB: db}
+}
+
 func ShowPost() []Post {
 	var posts []Post
 	db, err := sql.Open("sqlite3", "./sql/database.db")

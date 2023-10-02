@@ -5,7 +5,7 @@ import (
 	"text/template"
 )
 
-func SignIn(w http.ResponseWriter, r *http.Request) {
+func (controllers *Controllers) SignIn(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		ErrorHandler(w, http.StatusMethodNotAllowed)
 		return

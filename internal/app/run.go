@@ -2,6 +2,9 @@ package app
 
 import (
 	"database/sql"
+	"forum/internal/controllers"
+	"forum/internal/repo"
+	"forum/internal/services"
 	"log"
 )
 
@@ -10,6 +13,9 @@ func Run() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	Server()
+	repo := repo.RepositoryInstance(db)
+	service := services.ServiceInstance(repo)
+	controller := controllers.ControllersInstance(service)
+	Server(controller)
 	defer db.Close()
 }

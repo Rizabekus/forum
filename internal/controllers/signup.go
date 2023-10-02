@@ -6,7 +6,7 @@ import (
 	"text/template"
 )
 
-func SignUp(w http.ResponseWriter, r *http.Request) {
+func (controllers *Controllers) SignUp(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		ErrorHandler(w, http.StatusMethodNotAllowed)
 		return

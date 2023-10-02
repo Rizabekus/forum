@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func CommentConfirmation(w http.ResponseWriter, r *http.Request) {
+func (controllers *Controllers) CommentConfirmation(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.Header().Set("Allow", http.MethodPost)
 		w.WriteHeader(http.StatusMethodNotAllowed)

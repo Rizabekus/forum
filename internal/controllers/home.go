@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func Homepage(w http.ResponseWriter, r *http.Request) {
+func (controllers *Controllers) Homepage(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		ErrorHandler(w, http.StatusMethodNotAllowed)
 		return

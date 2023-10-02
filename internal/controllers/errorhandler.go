@@ -6,7 +6,7 @@ import (
 	"text/template"
 )
 
-func ErrorHandler(w http.ResponseWriter, status int) {
+func (controllers *Controllers) ErrorHandler(w http.ResponseWriter, status int) {
 	tmp, err := template.ParseFiles("./ui/html/error.html")
 	if err != nil || tmp == nil {
 		fmt.Print(err)

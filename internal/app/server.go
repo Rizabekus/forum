@@ -3,37 +3,32 @@ package app
 import (
 	"fmt"
 	"forum/internal/controllers"
-	"forum/internal/services"
 	"log"
 	"net/http"
 )
 
-func Server(c Controllers) {
+func Server(c *controllers.Controllers) {
 	mux := http.NewServeMux()
 	files := http.FileServer(http.Dir("./templates"))
 	mux.Handle("/templates/", http.StripPrefix("/templates", files))
 
-	mux.HandleFunc("/", controllers.Homepage)
-	mux.HandleFunc("/signup", controllers.SignUp)
-	mux.HandleFunc("/signin", controllers.SignIn)
-	mux.HandleFunc("/logout", controllers.Logout)
-	mux.HandleFunc("/signupconfirmation", controllers.SignUpConfirmation)
-	mux.HandleFunc("/signinconfirmation", controllers.SignInConfirmation)
-	mux.HandleFunc("/comments", controllers.PostPage)
-	mux.HandleFunc("/postconfirmation", controllers.PostConfirmation)
-	mux.HandleFunc("/commentconfirmation", controllers.CommentConfirmation)
-	mux.HandleFunc("/create", controllers.Create)
-	mux.HandleFunc("/like", controllers.Likes)
-	mux.HandleFunc("/dislike", controllers.Dislikes)
-	mux.HandleFunc("/filter", controllers.Filter)
-	mux.HandleFunc("/comlike", controllers.ComLikes)
-	mux.HandleFunc("/comdislike", controllers.ComDislikes)
-	mux.HandleFunc("/filter/likes", controllers.Likes)
+	mux.HandleFunc("/", c.Homepage)
+	mux.HandleFunc("/signup", c.SignUp)
+	mux.HandleFunc("/signin", c.SignIn)
+	mux.HandleFunc("/logout", c.Logout)
+	mux.HandleFunc("/signupconfirmation", c.SignUpConfirmation)
+	mux.HandleFunc("/signinconfirmation", c.SignInConfirmation)
+	mux.HandleFunc("/comments", c.PostPage)
+	mux.HandleFunc("/postconfirmation", c.PostConfirmation)
+	mux.HandleFunc("/commentconfirmation", c.CommentConfirmation)
+	mux.HandleFunc("/create", c.Create)
+	mux.HandleFunc("/like", c.Likes)
+	mux.HandleFunc("/dislike", c.Dislikes)
+	mux.HandleFunc("/filter", c.Filter)
+	mux.HandleFunc("/comlike", c.ComLikes)
+	mux.HandleFunc("/comdislike", c.ComDislikes)
+	mux.HandleFunc("/filter/likes", c.Likes)
 	fmt.Println("http://127.0.0.1:8000")
 	err := http.ListenAndServe(":8000", mux)
 	log.Fatal(err)
-}
-
-type Controllers struct {
-	Service services.Service
 }

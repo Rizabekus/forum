@@ -7,9 +7,9 @@ import (
 	"strings"
 )
 
-func ComLikes(w http.ResponseWriter, r *http.Request) {
+func (controllers *Controllers) ComLikes(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		ErrorHandler(w, http.StatusMethodNotAllowed)
+		controllers.ErrorHandler(w, http.StatusMethodNotAllowed)
 		return
 	}
 	previousURL := r.Header.Get("Referer")
@@ -18,12 +18,12 @@ func ComLikes(w http.ResponseWriter, r *http.Request) {
 
 	db, err := sql.Open("sqlite3", "./sql/database.db")
 	if err != nil {
-		ErrorHandler(w, http.StatusInternalServerError)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
 	cookie, err := r.Cookie("logged-in")
 	if err != nil {
-		ErrorHandler(w, http.StatusInternalServerError)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
 	var checkName string
@@ -34,14 +34,14 @@ func ComLikes(w http.ResponseWriter, r *http.Request) {
 	row.Close()
 	db, err = sql.Open("sqlite3", "./sql/database.db")
 	if err != nil {
-		ErrorHandler(w, http.StatusInternalServerError)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
 	checklikes := false
 	checkdislikes := false
 	rows, err := db.Query("SELECT Name FROM comlikes WHERE (Comid,Id)=(?,?)", id, postid)
 	if err != nil {
-		ErrorHandler(w, http.StatusInternalServerError)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
 	var likerName string
@@ -54,7 +54,7 @@ func ComLikes(w http.ResponseWriter, r *http.Request) {
 	}
 	x, err := db.Query("SELECT Name FROM comdislikes WHERE (Comid,Id)=(?,?)", id, postid)
 	if err != nil {
-		ErrorHandler(w, http.StatusInternalServerError)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
 
@@ -69,7 +69,7 @@ func ComLikes(w http.ResponseWriter, r *http.Request) {
 	}
 	tx, err := db.Begin()
 	if err != nil {
-		ErrorHandler(w, http.StatusInternalServerError)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
 	fmt.Println("GG", id)
@@ -78,7 +78,7 @@ func ComLikes(w http.ResponseWriter, r *http.Request) {
 		_, err = db.Exec("INSERT INTO comlikes (Name, Comid,Id) VALUES (?, ?, ?)", checkName, id, postid)
 		_, err = db.Exec("DELETE FROM comdislikes WHERE Name=(?) and Comid=(?) and Id=(?)", checkName, id, postid)
 		if err != nil {
-			ErrorHandler(w, http.StatusInternalServerError)
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
 
@@ -87,7 +87,7 @@ func ComLikes(w http.ResponseWriter, r *http.Request) {
 		_, err = db.Exec("INSERT INTO comlikes (Name, Comid,Id) VALUES (?, ?, ?)", checkName, id, postid)
 
 		if err != nil {
-			ErrorHandler(w, http.StatusInternalServerError)
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
 
@@ -96,7 +96,7 @@ func ComLikes(w http.ResponseWriter, r *http.Request) {
 		_, err = db.Exec("DELETE FROM comlikes WHERE Name=(?) and Comid=(?) and Id=(?)", checkName, id, postid)
 
 		if err != nil {
-			ErrorHandler(w, http.StatusInternalServerError)
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
 	}

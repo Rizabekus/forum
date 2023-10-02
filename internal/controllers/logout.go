@@ -7,7 +7,7 @@ import (
 	"text/template"
 )
 
-func Logout(w http.ResponseWriter, r *http.Request) {
+func (controllers *Controllers) Logout(w http.ResponseWriter, r *http.Request) {
 	db, err := sql.Open("sqlite3", "./sql/database.db")
 	if err != nil {
 		ErrorHandler(w, http.StatusInternalServerError)

@@ -1,13 +1,26 @@
 package services
 
-type Service struct {
-	UserService    UserService
-	PostService    PostService
-	CommentService CommentService
+import (
+	"forum/internal/models"
+	"forum/internal/repo"
+)
+
+type Services struct {
+	UserService          models.UserService
+	PostService          models.PostService
+	CommentService       models.CommentService
+	LikesDislikesService models.LikesDislikesService
 }
 
-type (
-	UserService    interface{}
-	PostService    interface{}
-	CommentService interface{}
-)
+func ServiceInstance(repo *repo.Repository) *Services {
+	return &Services{
+		UserService:          CreateUserService(repo.UserRepository),
+		PostService:          CreatePostService(repo.PostRepository),
+		CommentService:       CreateCommentService(repo.CommentRepository),
+		LikesDislikesService: CreateLikesDislikesService(repo.LikesDislikesRepository),
+	}
+}
+
+func CreateCommentService(repo *models.CommentRepository) *models.CommentService {
+	return &models.CommentService{repo: repo}
+}

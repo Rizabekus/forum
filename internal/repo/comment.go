@@ -7,18 +7,26 @@ import (
 	"log"
 )
 
-func AddComment(name, text string, id int, db *sql.DB) {
-	i, err := db.models
+type CommentDB struct {
+	DB *sql.DB
+}
+
+func CreateCommentsRepository(db *sql.DB) *CommentDB {
+	return &CommentDB{DB: db}
+}
+
+func (db *CommentDB) AddComment(name, text string, id int) {
+	i, err := db.DB.Query("SELECT count(*) from comments where id = (?)", id)
 	var count int
 	defer i.Close()
 	for i.Next() {
 		i.Scan(&count)
 	}
-	tx, err := db.Begin()
+	tx, err := db.DB.Begin()
 	if err != nil {
 		log.Fatal(err)
 	}
-	count1, err := db.Query("SELECT count(*) FROM comments WHERE Id=(?)", id)
+	count1, err := db.DB.Query("SELECT count(*) FROM comments WHERE Id=(?)", id)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -28,19 +36,19 @@ func AddComment(name, text string, id int, db *sql.DB) {
 		count1.Scan(&comid)
 	}
 
-	_, err = db.Exec("INSERT INTO comments (Name,Text,Id, Comid) VALUES (?, ?, ?, ?)", name, text, id, comid+1)
+	_, err = db.DB.Exec("INSERT INTO comments (Name,Text,Id, Comid) VALUES (?, ?, ?, ?)", name, text, id, comid+1)
 	if err != nil {
 		log.Fatal(err)
 	}
 	tx.Commit()
-	db.Close()
+	db.DB.Close()
 }
 
-func CollectComments(id int, db *sql.DB) []models.Comment {
+func (db *CommentDB) CollectComments(id int) []models.Comment {
 	var result []models.Comment
 	var name string
 	var text string
-	st, err := db.Query("SELECT Name, Text, Comid FROM comments WHERE Id=(?)", id)
+	st, err := db.DB.Query("SELECT Name, Text, Comid FROM comments WHERE Id=(?)", id)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -49,11 +57,11 @@ func CollectComments(id int, db *sql.DB) []models.Comment {
 	var comid int
 	for st.Next() {
 		st.Scan(&name, &text, &comid)
-		err := db.QueryRow("SELECT count(*) FROM comlikes WHERE (Comid,Id)=( ?, ? )", comid, id).Scan(&likes)
+		err := db.DB.QueryRow("SELECT count(*) FROM comlikes WHERE (Comid,Id)=( ?, ? )", comid, id).Scan(&likes)
 		if err != nil {
 			log.Fatal(err)
 		}
-		err = db.QueryRow("SELECT count(*) FROM comdislikes WHERE (Comid,Id)=(? , ? )", comid, id).Scan(&dislikes)
+		err = db.DB.QueryRow("SELECT count(*) FROM comdislikes WHERE (Comid,Id)=(? , ? )", comid, id).Scan(&dislikes)
 		if err != nil {
 			log.Fatal(err)
 		}
