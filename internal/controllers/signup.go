@@ -8,7 +8,7 @@ import (
 
 func (controllers *Controllers) SignUp(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		ErrorHandler(w, http.StatusMethodNotAllowed)
+		controllers.ErrorHandler(w, http.StatusMethodNotAllowed)
 		return
 	}
 	tmpl, err := template.ParseFiles("./ui/html/signup.html")

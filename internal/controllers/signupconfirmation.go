@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"database/sql"
 	"net/http"
 	"text/template"
 
@@ -10,7 +9,7 @@ import (
 
 func (controllers *Controllers) SignUpConfirmation(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		ErrorHandler(w, http.StatusMethodNotAllowed)
+		controllers.ErrorHandler(w, http.StatusMethodNotAllowed)
 		return
 	}
 	name := r.FormValue("UserName")
@@ -19,26 +18,22 @@ func (controllers *Controllers) SignUpConfirmation(w http.ResponseWriter, r *htt
 	password := r.FormValue("UserPassword")
 	rewrittenPassword := r.FormValue("UserRewrittenPassword")
 
-	result, text := models.ConfirmSignup(name, email, password, rewrittenPassword)
+	result, text := controllers.Service.UserService.ConfirmSignup(name, email, password, rewrittenPassword)
 	if result == true {
 
 		pwd, err := bcrypt.GenerateFromPassword([]byte(password), 1)
 		if err != nil {
-			ErrorHandler(w, http.StatusInternalServerError)
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
-		db, err := sql.Open("sqlite3", "./sql/database.db")
-		if err != nil {
-			ErrorHandler(w, http.StatusInternalServerError)
-			return
-		}
-		repository.AddUser(name, email, string(pwd), db)
+
+		controllers.Service.UserService.AddUser(name, email, string(pwd))
 
 		http.Redirect(w, r, "/signin", 302)
 	} else {
 		tmpl, err := template.ParseFiles("./ui/html/signup.html")
 		if err != nil {
-			ErrorHandler(w, http.StatusInternalServerError)
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
 		tmpl.Execute(w, text)

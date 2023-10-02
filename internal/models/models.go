@@ -31,7 +31,11 @@ type Post struct {
 }
 
 type (
-	UserService interface{}
+	UserService interface {
+		AddUser(UserName string, Email string, hashedPassword string)
+		ConfirmSignup(Name string, Email string, Password string, RewrittenPassword string) (bool, string)
+		ConfirmSignin(Name string, Password string) (bool, string)
+	}
 	PostService interface {
 		ShowPost() []Post
 	}
@@ -42,6 +46,8 @@ type (
 type (
 	UserRepository interface {
 		AddUser(UserName string, Email string, hashedPassword string)
+		ConfirmSignup(Name string, Email string, Password string, RewrittenPassword string) (bool, string)
+		ConfirmSignin(Name string, Password string) (bool, string)
 	}
 	PostRepository interface {
 		ShowPost() []Post
