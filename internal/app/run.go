@@ -16,6 +16,6 @@ func Run() {
 	repo := repo.RepositoryInstance(db)
 	service := services.ServiceInstance(repo)
 	controller := controllers.ControllersInstance(service)
-	Server(controller)
+	Routes(controller)
 	defer db.Close()
 }

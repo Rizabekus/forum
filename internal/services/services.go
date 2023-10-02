@@ -20,11 +20,3 @@ func ServiceInstance(repo *repo.Repository) *Services {
 		LikesDislikesService: CreateLikesDislikesService(repo.LikesDislikesRepository),
 	}
 }
-
-type CommentService struct {
-	repo *repo.Repository
-}
-
-func CreateCommentService(repo *models.CommentRepository) *models.CommentService {
-	return &models.CommentService{repo: repo}
-}

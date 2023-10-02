@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func Server(c *controllers.Controllers) {
+func Routes(c *controllers.Controllers) {
 	mux := http.NewServeMux()
 	files := http.FileServer(http.Dir("./templates"))
 	mux.Handle("/templates/", http.StripPrefix("/templates", files))

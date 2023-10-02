@@ -12,7 +12,7 @@ func RepositoryInstance(db *sql.DB) *Repository {
 		UserRepository:          CreateUserRepository(db),
 		PostRepository:          CreatePostRepository(db),
 		CommentRepository:       CreateCommentRepository(db),
-		LikesdislikesRepository: CreateLikesdislikesRepository(db),
+		LikesDislikesRepository: CreateLikesDislikesRepository(db),
 	}
 }
 
@@ -20,7 +20,7 @@ type Repository struct {
 	UserRepository          models.UserRepository
 	PostRepository          models.PostRepository
 	CommentRepository       models.CommentRepository
-	LikesdislikesRepository models.LikesdislikesRepository
+	LikesDislikesRepository models.LikesDislikesRepository
 }
 
 // ype Post struct {

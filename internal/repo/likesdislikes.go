@@ -6,6 +6,6 @@ type likesdislikesDB struct {
 	DB *sql.DB
 }
 
-func CreateLikesdislikesRepository(db *sql.DB) *likesdislikesDB {
+func CreateLikesDislikesRepository(db *sql.DB) *likesdislikesDB {
 	return &likesdislikesDB{DB: db}
 }

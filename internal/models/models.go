@@ -41,5 +41,5 @@ type (
 	UserRepository          interface{}
 	PostRepository          interface{}
 	CommentRepository       interface{}
-	LikesdislikesRepository interface{}
+	LikesDislikesRepository interface{}
 )

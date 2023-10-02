@@ -1,18 +1,12 @@
 package controllers
 
 import (
-	"database/sql"
 	"log"
 	"net/http"
 	"text/template"
 )
 
 func (controllers *Controllers) Logout(w http.ResponseWriter, r *http.Request) {
-	db, err := sql.Open("sqlite3", "./sql/database.db")
-	if err != nil {
-		ErrorHandler(w, http.StatusInternalServerError)
-		return
-	}
 	cookie, err := r.Cookie("logged-in")
 	internal.DeleteCookie(cookie.Value, db)
 	cookie = &http.Cookie{
