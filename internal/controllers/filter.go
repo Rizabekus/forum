@@ -16,27 +16,14 @@ func (controllers *Controllers) Filter(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	r.ParseForm()
-	cookie, err := r.Cookie("logged-in")
-	cc := cookie.Value
-	db, err := sql.Open("sqlite3", "./sql/database.db")
-	var namecookie string
+	cc := controllers.Service.CookiesService.GetCookie(r)
 
-	Name, err := db.Query("SELECT lame FROM cookies WHERE Id = ( ? )", cc)
-	if err != nil {
-		controllers.ErrorHandler(w, http.StatusInternalServerError)
-		return
-	}
-	defer Name.Close()
-	for Name.Next() {
-		Name.Scan(&namecookie)
-	}
-	Name.Close()
-	db.Close()
+	banecookie := controller.Service.UserService.FindUserByToken(cc)
 
 	likesdislikes := r.Form["LikeDislike"]
 	categories := r.Form["Category"]
 	var formattedlikes []string
-
+	/////////////////
 	for i := range likesdislikes {
 		formattedlikes = append(formattedlikes, likesdislikes[i]+"s.Postid")
 	}
@@ -200,7 +187,7 @@ func (controllers *Controllers) Filter(w http.ResponseWriter, r *http.Request) {
 
 		tmpl, err := template.ParseFiles(files...)
 		if err != nil {
-			ErrorHandler(w, http.StatusInternalServerError)
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
 
@@ -267,7 +254,7 @@ func (controllers *Controllers) Filter(w http.ResponseWriter, r *http.Request) {
 
 		}
 		db.Close()
-
+		////////
 		cook, err := r.Cookie("logged-in")
 		var files []string
 		if err == http.ErrNoCookie || cook.Value == "not-logged" {
@@ -283,7 +270,7 @@ func (controllers *Controllers) Filter(w http.ResponseWriter, r *http.Request) {
 		}
 		tmpl, err := template.ParseFiles(files...)
 		if err != nil {
-			ErrorHandler(w, http.StatusInternalServerError)
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
 
