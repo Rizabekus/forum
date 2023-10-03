@@ -92,3 +92,32 @@ func (db *PostDB) CreatePost(cookie string, text string, category string, title 
 	tx.Commit()
 	db.DB.Close()
 }
+
+func (db *PostDB) CountPosts() int {
+	count, err := db.DB.Query("select count(*) from posts;")
+	if err != nil {
+		log.Fatal(err)
+	}
+	var i int
+	defer count.Close()
+	for count.Next() {
+		count.Scan(&i)
+	}
+	return i
+}
+
+func (db *PostDB) SelectPostByID(id int) (string, string, string) {
+	qu, err := db.DB.Query("select Title, Post,Namae from posts where Id=(?)", id)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer qu.Close()
+	var title string
+	var text string
+	var name string
+	for qu.Next() {
+		qu.Scan(&title, &text, &name)
+	}
+	return title, text, name
+	// db.Close()
+}

@@ -41,9 +41,12 @@ type (
 	PostService interface {
 		ShowPost() []Post
 		CreatePost(cookie string, text string, category string, title string)
+		CountPosts() int
+		SelectPostByID(id int) (string, string, string)
 	}
 	CommentService interface {
 		AddComment(name, text string, id int)
+		CollectComments(id int) []Comment
 	}
 	LikesDislikesService interface{}
 )
@@ -59,6 +62,8 @@ type (
 	PostRepository interface {
 		ShowPost() []Post
 		CreatePost(cookie string, text string, category string, title string)
+		CountPosts() int
+		SelectPostByID(id int) (string, string, string)
 	}
 	CommentRepository interface {
 		AddComment(name, text string, id int)

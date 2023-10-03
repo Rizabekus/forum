@@ -13,3 +13,7 @@ func CreateCommentService(repo models.CommentRepository) *CommentService {
 func (CommentService *CommentService) AddComment(name, text string, id int) {
 	CommentService.repo.AddComment(name, text, id)
 }
+
+func (CommentService *CommentService) CollectComments(id int) []models.Comment {
+	return CommentService.repo.CollectComments(id)
+}

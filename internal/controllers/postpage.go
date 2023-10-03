@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"database/sql"
+	"forum/internal/models"
 	"net/http"
 	"strconv"
 	"strings"
@@ -24,42 +24,15 @@ func (controllers *Controllers) PostPage(w http.ResponseWriter, r *http.Request)
 		controllers.ErrorHandler(w, http.StatusNotFound)
 		return
 	}
-	db, err := sql.Open("sqlite3", "./sql/database.db")
-	if err != nil {
-		controllers.ErrorHandler(w, http.StatusInternalServerError)
-		return
-	}
-	qu, err := db.Query("select Title, Post,Namae from posts where Id=(?)", id)
-	if err != nil {
-		controllers.ErrorHandler(w, http.StatusInternalServerError)
-		return
-	}
-	defer qu.Close()
-	var title string
-	var text string
-	var name string
-	for qu.Next() {
-		qu.Scan(&title, &text, &name)
-	}
+	title, text, name := controllers.Service.PostService.SelectPostByID(id)
 
-	db.Close()
 	if r.URL.String() != "/comments?id="+strconv.Itoa(id) {
 		controllers.ErrorHandler(w, http.StatusNotFound)
 		return
 	}
-	db, err = sql.Open("sqlite3", "./sql/database.db")
-	defer db.Close()
-	count, err := db.Query("select count(*) from posts;")
-	if err != nil {
-		controllers.ErrorHandler(w, http.StatusInternalServerError)
-		return
-	}
-	var i int
-	defer count.Close()
-	for count.Next() {
-		count.Scan(&i)
-	}
-	if id > i || id < 1 {
+	count := controllers.Service.PostService.CountPosts()
+
+	if id > count || id < 1 {
 		controllers.ErrorHandler(w, http.StatusNotFound)
 		return
 	}
@@ -70,8 +43,8 @@ func (controllers *Controllers) PostPage(w http.ResponseWriter, r *http.Request)
 		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
-	comments := internal.CollectComments(id, db)
-	result := internal.Postpage{
+	comments := controllers.Service.CommentService.CollectComments(id)
+	result := models.Postpage{
 		Title:    title,
 		Post:     text,
 		Name:     name,

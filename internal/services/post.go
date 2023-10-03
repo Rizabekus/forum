@@ -17,3 +17,11 @@ func (PostService *PostService) ShowPost() []models.Post {
 func (PostService *PostService) CreatePost(cookie string, text string, category string, title string) {
 	PostService.repo.CreatePost(cookie, text, category, title)
 }
+
+func (PostService *PostService) CountPosts() int {
+	return PostService.repo.CountPosts()
+}
+
+func (PostService *PostService) SelectPostByID(id int) (string, string, string) {
+	return PostService.repo.SelectPostByID(id)
+}
