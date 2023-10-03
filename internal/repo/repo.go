@@ -13,6 +13,7 @@ func RepositoryInstance(db *sql.DB) *Repository {
 		PostRepository:          CreatePostRepository(db),
 		CommentRepository:       CreateCommentRepository(db),
 		LikesDislikesRepository: CreateLikesDislikesRepository(db),
+		CookiesRepository:       CreateCookiesRepository(db),
 	}
 }
 
@@ -21,6 +22,7 @@ type Repository struct {
 	PostRepository          models.PostRepository
 	CommentRepository       models.CommentRepository
 	LikesDislikesRepository models.LikesDislikesRepository
+	CookiesRepository       models.CookiesRepository
 }
 
 // ype Post struct {

@@ -10,6 +10,7 @@ type Services struct {
 	PostService          models.PostService
 	CommentService       models.CommentService
 	LikesDislikesService models.LikesDislikesService
+	CookiesService       models.CookiesService
 }
 
 func ServiceInstance(repo *repo.Repository) *Services {
@@ -18,5 +19,6 @@ func ServiceInstance(repo *repo.Repository) *Services {
 		PostService:          CreatePostService(repo.PostRepository),
 		CommentService:       CreateCommentService(repo.CommentRepository),
 		LikesDislikesService: CreateLikesDislikesService(repo.LikesDislikesRepository),
+		CookiesService:       CreateCookiesService(repo.CookiesRepository),
 	}
 }

@@ -1,5 +1,7 @@
 package models
 
+import "net/http"
+
 type Postpage struct {
 	Title    string
 	Post     string
@@ -52,6 +54,11 @@ type (
 		Like(user string, id string)
 		Dislike(user string, id string)
 	}
+	CookiesService interface {
+		SetCookie(w http.ResponseWriter, cookie *http.Cookie)
+		GetCookie(r *http.Request) *http.Cookie
+		DeleteCookie(cookie string)
+	}
 )
 
 type (
@@ -79,5 +86,8 @@ type (
 		RemoveDislike(user string, id string)
 		AddDislike(user string, id string)
 		AddLike(user string, id string)
+	}
+	CookiesRepository interface {
+		DeleteCookie(cookie string)
 	}
 )
