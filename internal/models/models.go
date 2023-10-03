@@ -48,7 +48,10 @@ type (
 		AddComment(name, text string, id int)
 		CollectComments(id int) []Comment
 	}
-	LikesDislikesService interface{}
+	LikesDislikesService interface {
+		Like(user string, id string)
+		Dislike(user string, id string)
+	}
 )
 
 type (
@@ -69,5 +72,12 @@ type (
 		AddComment(name, text string, id int)
 		CollectComments(id int) []Comment
 	}
-	LikesDislikesRepository interface{}
+	LikesDislikesRepository interface {
+		CheckLikeExistence(user string, id string) bool
+		CheckDislikeExistence(user string, id string) bool
+		RemoveLike(user string, id string)
+		RemoveDislike(user string, id string)
+		AddDislike(user string, id string)
+		AddLike(user string, id string)
+	}
 )

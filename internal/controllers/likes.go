@@ -13,10 +13,10 @@ func (controllers *Controllers) Likes(w http.ResponseWriter, r *http.Request) {
 
 	cookie, err := r.Cookie("logged-in")
 	if err != nil {
-		ErrorHandler(w, http.StatusInternalServerError)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
-	controllers.Service.LikesDislikesService.Like(id, cookie.Value)
-
+	controllers.Service.LikesDislikesService.Like(id, controllers.Service.UserService.FindUserByToken(cookie.Value))
+	previousURL := r.Header.Get("Referer")
 	http.Redirect(w, r, previousURL, 302)
 }
