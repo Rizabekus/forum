@@ -54,5 +54,9 @@ func (UserService *UserService) ConfirmSignin(Name string, Password string) (boo
 }
 
 func (UserService *UserService) CreateSession(id, name string) {
-	UserService.CreateSession(id, name)
+	UserService.repo.CreateSession(id, name)
+}
+
+func (UserService *UserService) FindUserByToken(cookie string) string {
+	return UserService.repo.FindUserByToken(cookie)
 }

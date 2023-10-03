@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"database/sql"
 	"net/http"
 	"strconv"
 	"strings"
@@ -35,24 +34,9 @@ func (controllers *Controllers) CommentConfirmation(w http.ResponseWriter, r *ht
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
 		}
-		db, err := sql.Open("sqlite3", "./sql/database.db")
-		if err != nil {
-			ErrorHandler(w, http.StatusInternalServerError)
-			return
-		}
+		name := controllers.Service.UserService.FindUserByToken(cookie.Value)
 
-		st, err := db.Query("SELECT lame FROM cookies WHERE Id=(?)", cookie.Value)
-		if err != nil {
-			ErrorHandler(w, http.StatusInternalServerError)
-			return
-		}
-		var name string
-		for st.Next() {
-			st.Scan(&name)
-		}
-		st.Close()
-
-		internal.AddComment(name, text, id, db)
+		controllers.Service.CommentService.AddComment(name, text, id)
 		http.Redirect(w, r, previousURL, 302)
 	}
 }

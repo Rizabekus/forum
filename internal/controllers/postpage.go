@@ -10,28 +10,28 @@ import (
 
 func (controllers *Controllers) PostPage(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		ErrorHandler(w, http.StatusMethodNotAllowed)
+		controllers.ErrorHandler(w, http.StatusMethodNotAllowed)
 		return
 	}
 	xurl := strings.Split(r.URL.String(), "id=")
 	if len(xurl) < 2 {
-		ErrorHandler(w, http.StatusNotFound)
+		controllers.ErrorHandler(w, http.StatusNotFound)
 		return
 	}
 
 	id, err := strconv.Atoi(xurl[1])
 	if err != nil {
-		ErrorHandler(w, http.StatusNotFound)
+		controllers.ErrorHandler(w, http.StatusNotFound)
 		return
 	}
 	db, err := sql.Open("sqlite3", "./sql/database.db")
 	if err != nil {
-		ErrorHandler(w, http.StatusInternalServerError)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
 	qu, err := db.Query("select Title, Post,Namae from posts where Id=(?)", id)
 	if err != nil {
-		ErrorHandler(w, http.StatusInternalServerError)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
 	defer qu.Close()
@@ -44,14 +44,14 @@ func (controllers *Controllers) PostPage(w http.ResponseWriter, r *http.Request)
 
 	db.Close()
 	if r.URL.String() != "/comments?id="+strconv.Itoa(id) {
-		ErrorHandler(w, http.StatusNotFound)
+		controllers.ErrorHandler(w, http.StatusNotFound)
 		return
 	}
 	db, err = sql.Open("sqlite3", "./sql/database.db")
 	defer db.Close()
 	count, err := db.Query("select count(*) from posts;")
 	if err != nil {
-		ErrorHandler(w, http.StatusInternalServerError)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
 	var i int
@@ -60,14 +60,14 @@ func (controllers *Controllers) PostPage(w http.ResponseWriter, r *http.Request)
 		count.Scan(&i)
 	}
 	if id > i || id < 1 {
-		ErrorHandler(w, http.StatusNotFound)
+		controllers.ErrorHandler(w, http.StatusNotFound)
 		return
 	}
 
 	tmp, err := template.ParseFiles("./ui/html/comments.html")
 	if err != nil {
 
-		ErrorHandler(w, http.StatusInternalServerError)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
 	comments := internal.CollectComments(id, db)

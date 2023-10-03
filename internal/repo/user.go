@@ -94,3 +94,16 @@ func (UserDB *UserDB) ConfirmSignin(Name string, Password string) (bool, string)
 
 	return false, "User does not exist."
 }
+
+func (UserDB *UserDB) FindUserByToken(cookie string) string {
+	st, err := UserDB.DB.Query("SELECT lame FROM cookies WHERE Id=(?)", cookie)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var name string
+	for st.Next() {
+		st.Scan(&name)
+	}
+	st.Close()
+	return name
+}

@@ -13,3 +13,7 @@ func CreatePostService(repo models.PostRepository) *PostService {
 func (PostService *PostService) ShowPost() []models.Post {
 	return PostService.repo.ShowPost()
 }
+
+func (PostService *PostService) CreatePost(cookie string, text string, category string, title string) {
+	PostService.repo.CreatePost(cookie, text, category, title)
+}

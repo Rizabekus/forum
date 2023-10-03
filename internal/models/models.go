@@ -35,11 +35,16 @@ type (
 		AddUser(UserName string, Email string, hashedPassword string)
 		ConfirmSignup(Name string, Email string, Password string, RewrittenPassword string) (bool, string)
 		ConfirmSignin(Name string, Password string) (bool, string)
+		CreateSession(id, name string)
+		FindUserByToken(cookie string) string
 	}
 	PostService interface {
 		ShowPost() []Post
+		CreatePost(cookie string, text string, category string, title string)
 	}
-	CommentService       interface{}
+	CommentService interface {
+		AddComment(name, text string, id int)
+	}
 	LikesDislikesService interface{}
 )
 
@@ -48,6 +53,8 @@ type (
 		AddUser(UserName string, Email string, hashedPassword string)
 		ConfirmSignup(Name string, Email string, Password string, RewrittenPassword string) (bool, string)
 		ConfirmSignin(Name string, Password string) (bool, string)
+		CreateSession(id, name string)
+		FindUserByToken(cookie string) string
 	}
 	PostRepository interface {
 		ShowPost() []Post
