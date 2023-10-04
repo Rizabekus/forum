@@ -13,6 +13,7 @@ func (controllers *Controllers) SignInConfirmation(w http.ResponseWriter, r *htt
 		controllers.ErrorHandler(w, http.StatusMethodNotAllowed)
 		return
 	}
+
 	name := r.FormValue("UserName")
 	password := r.FormValue("UserPassword")
 	result, text := controllers.Service.UserService.ConfirmSignin(name, password)

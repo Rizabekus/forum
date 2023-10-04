@@ -46,7 +46,8 @@ func (UserService *UserService) ConfirmSignup(Name string, Email string, Passwor
 	if emailRegex.MatchString(Email) == false {
 		return false, "Wrong format for Email."
 	}
-	return UserService.ConfirmSignup(Name, Email, Password, RewrittenPassword)
+
+	return UserService.repo.ConfirmSignup(Name, Email, Password, RewrittenPassword)
 }
 
 func (UserService *UserService) ConfirmSignin(Name string, Password string) (bool, string) {

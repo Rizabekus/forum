@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"text/template"
 
@@ -12,13 +13,15 @@ func (controllers *Controllers) SignUpConfirmation(w http.ResponseWriter, r *htt
 		controllers.ErrorHandler(w, http.StatusMethodNotAllowed)
 		return
 	}
+
 	name := r.FormValue("UserName")
 
 	email := r.FormValue("UserEmail")
 	password := r.FormValue("UserPassword")
 	rewrittenPassword := r.FormValue("UserRewrittenPassword")
-
+	fmt.Println("works")
 	result, text := controllers.Service.UserService.ConfirmSignup(name, email, password, rewrittenPassword)
+
 	if result == true {
 
 		pwd, err := bcrypt.GenerateFromPassword([]byte(password), 1)
