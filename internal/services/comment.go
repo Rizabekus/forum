@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"forum/internal/models"
 )
 
@@ -25,7 +24,6 @@ func (CommentService *CommentService) LikeComment(checkname string, id string, p
 	checklikes := CommentService.repo.CommentLikeExistence(checkname, id, postid)
 	checkdislikes := CommentService.repo.CommentDislikeExistence(checkname, id, postid)
 
-	fmt.Println("GG", id)
 	if checklikes == false && checkdislikes == true {
 		CommentService.repo.AddLikeToComment(checkname, id, postid)
 		CommentService.repo.RemoveDislikeFromComment(checkname, id, postid)

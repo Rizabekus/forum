@@ -53,7 +53,7 @@ func (PostService *PostService) DislikePost(user string, id string) {
 
 	} else if checklikes == false && checkdislikes == false {
 		PostService.repo.AddDislikeToPost(user, id)
-	} else if checklikes == true && checkdislikes == false {
+	} else if checklikes == false && checkdislikes == true {
 		PostService.repo.RemoveDislikeAtPost(user, id)
 	}
 }

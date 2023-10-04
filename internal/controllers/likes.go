@@ -16,7 +16,7 @@ func (controllers *Controllers) Likes(w http.ResponseWriter, r *http.Request) {
 		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
-	controllers.Service.PostService.LikePost(id, controllers.Service.UserService.FindUserByToken(cookie.Value))
+	controllers.Service.PostService.LikePost(controllers.Service.UserService.FindUserByToken(cookie.Value), id)
 	previousURL := r.Header.Get("Referer")
 	http.Redirect(w, r, previousURL, 302)
 }

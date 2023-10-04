@@ -2,6 +2,7 @@ package repo
 
 import (
 	"database/sql"
+	"fmt"
 	"forum/internal/models"
 	"log"
 )
@@ -32,6 +33,7 @@ func (db *PostDB) ShowPost() []models.Post {
 	var i int
 	var likes int
 	var dislikes int
+
 	defer row.Close()
 	for row.Next() {
 		row.Scan(&title, &t, &n, &c, &i)
@@ -52,7 +54,7 @@ func (db *PostDB) ShowPost() []models.Post {
 			Likes:    likes,
 			Dislikes: dislikes,
 		}
-
+		fmt.Printf("%v likes\n%v dislikes\n", likes, dislikes)
 		posts = append(posts, onepost)
 	}
 
@@ -156,51 +158,31 @@ func (db *PostDB) PostDislikeExistence(user string, id string) bool {
 }
 
 func (db *PostDB) AddLikeToPost(user string, id string) {
-	tx, err := db.DB.Begin()
+	_, err := db.DB.Exec("INSERT INTO likes (Name, Postid) VALUES (?, ?)", user, id)
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, err = db.DB.Exec("INSERT INTO likes (Name, Postid) VALUES (?, ?)", user, id)
-	if err != nil {
-		log.Fatal(err)
-	}
-	tx.Commit()
 }
 
 func (db *PostDB) AddDislikeToPost(user string, id string) {
-	tx, err := db.DB.Begin()
+	_, err := db.DB.Exec("INSERT INTO dislikes (Name, Postid) VALUES (?, ?)", user, id)
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, err = db.DB.Exec("INSERT INTO dislikes (Name, Postid) VALUES (?, ?)", user, id)
-	if err != nil {
-		log.Fatal(err)
-	}
-	tx.Commit()
 }
 
 func (db *PostDB) RemoveLikeAtPost(user string, id string) {
-	tx, err := db.DB.Begin()
+	_, err := db.DB.Exec("DELETE FROM likes WHERE Name=(?) and Postid=(?)", user, id)
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, err = db.DB.Exec("DELETE FROM likes WHERE Name=(?) and Postid=(?)", user, id)
-	if err != nil {
-		log.Fatal(err)
-	}
-	tx.Commit()
 }
 
 func (db *PostDB) RemoveDislikeAtPost(user string, id string) {
-	tx, err := db.DB.Begin()
+	_, err := db.DB.Exec("DELETE FROM dislikes WHERE Name=(?) and Postid=(?)", user, id)
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, err = db.DB.Exec("DELETE FROM dislikes WHERE Name=(?) and Postid=(?)", user, id)
-	if err != nil {
-		log.Fatal(err)
-	}
-	tx.Commit()
 }
 
 func (db *PostDB) Filter(namecookie string, likesdislikes []string, categories []string, yourposts []string, text string) []models.Post {
