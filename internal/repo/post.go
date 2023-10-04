@@ -122,10 +122,6 @@ func (db *PostDB) SelectPostByID(id int) (string, string, string) {
 	// db.Close()
 }
 
-func PostLikeExistence(db *sql.DB) *likesdislikesDB {
-	return &likesdislikesDB{DB: db}
-}
-
 func (db *PostDB) PostLikeExistence(user string, id string) bool {
 	checklikes := false
 	rows, err := db.DB.Query("SELECT Name FROM likes WHERE Postid=(?)", id)
