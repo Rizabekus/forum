@@ -52,6 +52,8 @@ type (
 	CommentService interface {
 		AddComment(name, text string, id int)
 		CollectComments(id int) []Comment
+		LikeComment(checkname string, id string, postid string)
+		DislikeComment(checkname string, id string, postid string)
 	}
 
 	CookiesService interface {
@@ -85,6 +87,12 @@ type (
 	CommentRepository interface {
 		AddComment(name, text string, id int)
 		CollectComments(id int) []Comment
+		CommentDislikeExistence(checkname string, id string, postid string) bool
+		CommentLikeExistence(checkname string, id string, postid string) bool
+		AddLikeToComment(checkname string, id string, postid string)
+		RemoveDislikeFromComment(checkname string, id string, postid string)
+		AddDislikeikeToComment(checkname string, id string, postid string)
+		RemoveLikeFromComment(checkname string, id string, postid string)
 	}
 
 	CookiesRepository interface {

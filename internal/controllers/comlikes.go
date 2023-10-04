@@ -14,9 +14,7 @@ func (controllers *Controllers) ComLikes(w http.ResponseWriter, r *http.Request)
 	postid := (strings.Split(previousURL, "id="))[1]
 	id := r.FormValue("id")
 	username := controllers.Service.UserService.FindUserByToken(controllers.Service.CookiesService.GetCookie(r).Value)
-	controllers.Service.CommentService.LikeComment(username)
-	//////////////////////////
+	controllers.Service.CommentService.LikeComment(username, id, postid)
 
-	////////////////////
 	http.Redirect(w, r, previousURL, 302)
 }

@@ -77,3 +77,67 @@ func (db *CommentDB) CollectComments(id int) []models.Comment {
 	fmt.Println(result)
 	return result
 }
+
+func (db *CommentDB) CommentLikeExistence(checkname string, id string, postid string) bool {
+	checklikes := false
+	rows, err := db.DB.Query("SELECT Name FROM comlikes WHERE (Comid,Id)=(?,?)", id, postid)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var likerName string
+	defer rows.Close()
+	for rows.Next() {
+		rows.Scan(&likerName)
+		if likerName == checkname {
+			checklikes = true
+		}
+	}
+	return checklikes
+}
+
+func (db *CommentDB) CommentDislikeExistence(checkname string, id string, postid string) bool {
+	checkdislikes := false
+	x, err := db.DB.Query("SELECT Name FROM comdislikes WHERE (Comid,Id)=(?,?)", id, postid)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var dislikerName string
+	defer x.Close()
+
+	for x.Next() {
+		x.Scan(&dislikerName)
+		if dislikerName == checkname {
+			checkdislikes = true
+		}
+	}
+	return checkdislikes
+}
+
+func (db *CommentDB) AddLikeToComment(checkname string, id string, postid string) {
+	_, err := db.DB.Exec("INSERT INTO comlikes (Name, Comid,Id) VALUES (?, ?, ?)", checkname, id, postid)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func (db *CommentDB) RemoveDislikeFromComment(checkname string, id string, postid string) {
+	_, err := db.DB.Exec("DELETE FROM comdislikes WHERE Name=(?) and Comid=(?) and Id=(?)", checkname, id, postid)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func (db *CommentDB) AddDislikeikeToComment(checkname string, id string, postid string) {
+	_, err := db.DB.Exec("INSERT INTO comdislikes (Name, Comid,Id) VALUES (?, ?, ?)", checkname, id, postid)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func (db *CommentDB) RemoveLikeFromComment(checkname string, id string, postid string) {
+	_, err := db.DB.Exec("DELETE FROM comlikes WHERE Name=(?) and Comid=(?) and Id=(?)", checkname, id, postid)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
