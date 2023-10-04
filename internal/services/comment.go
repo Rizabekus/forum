@@ -17,3 +17,6 @@ func (CommentService *CommentService) AddComment(name, text string, id int) {
 func (CommentService *CommentService) CollectComments(id int) []models.Comment {
 	return CommentService.repo.CollectComments(id)
 }
+
+func (CommentService *CommentService) LikeComment() {
+}

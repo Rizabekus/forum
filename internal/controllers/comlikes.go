@@ -15,7 +15,7 @@ func (controllers *Controllers) ComLikes(w http.ResponseWriter, r *http.Request)
 	previousURL := r.Header.Get("Referer")
 	postid := (strings.Split(previousURL, "id="))[1]
 	id := r.FormValue("id")
-
+	//////////////////////////
 	db, err := sql.Open("sqlite3", "./sql/database.db")
 	if err != nil {
 		controllers.ErrorHandler(w, http.StatusInternalServerError)
@@ -101,6 +101,6 @@ func (controllers *Controllers) ComLikes(w http.ResponseWriter, r *http.Request)
 		}
 	}
 	tx.Commit()
-
+	////////////////////
 	http.Redirect(w, r, previousURL, 302)
 }

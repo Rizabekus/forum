@@ -50,7 +50,6 @@ func (controllers *Controllers) PostPage(w http.ResponseWriter, r *http.Request)
 		Name:     name,
 		Comments: comments,
 	}
-	// fmt.Printf("%s i title\n%s is post\n%s is name\n", title, text, name)
-	// fmt.Println(comments)
+
 	err = tmp.Execute(w, result)
 }
