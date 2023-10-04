@@ -57,7 +57,7 @@ func (db *PostDB) ShowPost() []models.Post {
 	}
 
 	tx.Commit()
-	db.DB.Close()
+
 	return posts
 }
 
@@ -90,7 +90,6 @@ func (db *PostDB) CreatePost(cookie string, text string, category string, title 
 		log.Fatal(err)
 	}
 	tx.Commit()
-	db.DB.Close()
 }
 
 func (db *PostDB) CountPosts() int {
@@ -119,7 +118,6 @@ func (db *PostDB) SelectPostByID(id int) (string, string, string) {
 		qu.Scan(&title, &text, &name)
 	}
 	return title, text, name
-	// db.Close()
 }
 
 func (db *PostDB) PostLikeExistence(user string, id string) bool {

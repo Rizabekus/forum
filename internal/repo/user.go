@@ -23,7 +23,6 @@ func (UserDB *UserDB) AddUser(UserName string, Email string, hashedPassword stri
 	}
 
 	statement.Exec(UserName, Email, hashedPassword)
-	UserDB.DB.Close()
 }
 
 func (UserDB *UserDB) CreateSession(id, name string) {
@@ -37,7 +36,6 @@ func (UserDB *UserDB) CreateSession(id, name string) {
 		log.Fatal(err)
 	}
 	tx.Commit()
-	UserDB.DB.Close()
 }
 
 func (UserDB *UserDB) ConfirmSignup(Name string, Email string, Password string, RewrittenPassword string) (bool, string) {

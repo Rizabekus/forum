@@ -23,5 +23,4 @@ func (db *cookiesDB) DeleteCookie(cookie string) {
 		log.Fatal(err)
 	}
 	tx.Commit()
-	// db.Close()
 }

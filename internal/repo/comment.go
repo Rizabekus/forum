@@ -2,7 +2,6 @@ package repo
 
 import (
 	"database/sql"
-	"fmt"
 	"forum/internal/models"
 	"log"
 )
@@ -41,7 +40,6 @@ func (db *CommentDB) AddComment(name, text string, id int) {
 		log.Fatal(err)
 	}
 	tx.Commit()
-	db.DB.Close()
 }
 
 func (db *CommentDB) CollectComments(id int) []models.Comment {
@@ -74,7 +72,7 @@ func (db *CommentDB) CollectComments(id int) []models.Comment {
 		}
 		result = append(result, x)
 	}
-	fmt.Println(result)
+
 	return result
 }
 

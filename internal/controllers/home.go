@@ -52,7 +52,7 @@ func (controllers *Controllers) Homepage(w http.ResponseWriter, r *http.Request)
 			}
 			db.Exec("Delete * from cookies where Id = ( ? )", cookie.Value)
 			tx.Commit()
-			db.Close()
+
 			cookie = &http.Cookie{
 				Name:  "logged-in",
 				Value: "not-logged",
@@ -82,7 +82,7 @@ func (controllers *Controllers) Homepage(w http.ResponseWriter, r *http.Request)
 			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
-		db.Close()
+
 		tmpl.Execute(w, controllers.Service.PostService.ShowPost())
 
 	}
