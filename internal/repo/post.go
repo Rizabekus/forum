@@ -17,10 +17,10 @@ func CreatePostRepository(db *sql.DB) *PostDB {
 func (db *PostDB) ShowPost() []models.Post {
 	var posts []models.Post
 
-	tx, err := db.DB.Begin()
-	if err != nil {
-		log.Fatal(err)
-	}
+	// tx, err := db.DB.Begin()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 	row, err := db.DB.Query("SELECT * FROM posts")
 	if err != nil {
 		log.Fatal(err)
@@ -56,7 +56,7 @@ func (db *PostDB) ShowPost() []models.Post {
 		posts = append(posts, onepost)
 	}
 
-	tx.Commit()
+	// tx.Commit()
 
 	return posts
 }

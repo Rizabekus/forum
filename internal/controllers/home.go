@@ -20,6 +20,7 @@ func (controllers *Controllers) Homepage(w http.ResponseWriter, r *http.Request)
 	cookie, err := r.Cookie("logged-in")
 
 	if err == http.ErrNoCookie || cookie.Value == "not-logged" {
+
 		cookie = &http.Cookie{
 			Name:  "logged-in",
 			Value: "not-logged",
@@ -36,11 +37,14 @@ func (controllers *Controllers) Homepage(w http.ResponseWriter, r *http.Request)
 			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
+
 		tmpl.Execute(w, controllers.Service.PostService.ShowPost())
+
 	} else if err != nil {
 		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	} else {
+
 		if time.Now().After(cookie.Expires) {
 			// DeleteByID
 			db, err := sql.Open("sqlite3", "./sql/database.db")
@@ -59,6 +63,7 @@ func (controllers *Controllers) Homepage(w http.ResponseWriter, r *http.Request)
 			}
 
 		}
+
 		c := cookie.Value
 		db, err := sql.Open("sqlite3", "./sql/database.db")
 		var name string
