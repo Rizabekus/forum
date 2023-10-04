@@ -47,6 +47,7 @@ type (
 		SelectPostByID(id int) (string, string, string)
 		LikePost(user string, id string)
 		DislikePost(user string, id string)
+		Filter(namecookie string, likesdislikes []string, categories []string, yourposts []string) []Post
 	}
 	CommentService interface {
 		AddComment(name, text string, id int)
@@ -79,6 +80,7 @@ type (
 		AddDislikeToPost(user string, id string)
 		PostDislikeExistence(user string, id string) bool
 		PostLikeExistence(user string, id string) bool
+		Filter(namecookie string, likesdislikes []string, categories []string, yourposts []string, text string) []Post
 	}
 	CommentRepository interface {
 		AddComment(name, text string, id int)

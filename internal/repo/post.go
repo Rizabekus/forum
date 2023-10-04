@@ -208,3 +208,113 @@ func (db *PostDB) RemoveDislikeAtPost(user string, id string) {
 	}
 	tx.Commit()
 }
+
+func (db *PostDB) Filter(namecookie string, likesdislikes []string, categories []string, yourposts []string, text string) []models.Post {
+	rows, err := db.DB.Query(text)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var title string
+	var t string
+	var n string
+	var c string
+	var i int
+	var likes int
+	var dislikes int
+	var posts []models.Post
+	var ids []int
+
+	for rows.Next() {
+		rows.Scan(&title, &t, &n, &c, &i)
+		x := false
+		for _, el := range ids {
+			if el == i {
+				x = true
+				break
+			}
+		}
+		if x == true {
+			continue
+		}
+		ids = append(ids, i)
+
+		err := db.DB.QueryRow("SELECT count(*) FROM likes WHERE Postid=(?)", i).Scan(&likes)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = db.DB.QueryRow("SELECT count(*) FROM dislikes WHERE Postid=(?)", i).Scan(&dislikes)
+		if err != nil {
+			log.Fatal(err)
+		}
+		onepost := models.Post{
+			Title:    title,
+			Text:     t,
+			Name:     n,
+			Category: c,
+			Id:       i,
+			Likes:    likes,
+			Dislikes: dislikes,
+		}
+		posts = append(posts, onepost)
+
+	}
+
+	if len(yourposts) == 1 && (len(categories) != 0 || len(likesdislikes) != 0) {
+
+		name := namecookie
+		var res []models.Post
+		for i := range posts {
+			if posts[i].Name == name {
+				res = append(res, posts[i])
+			}
+		}
+
+		return res
+
+	} else if len(yourposts) == 1 && len(categories) == 0 && len(likesdislikes) == 0 {
+
+		name := namecookie
+
+		var res1 []models.Post
+		st1, err := db.DB.Query("SELECT Title, Post,Namae,Category,Id FROM posts WHERE Namae=(?)", name)
+		if err != nil {
+			log.Fatal(err)
+		}
+		var title string
+		var t string
+		var n string
+		var c string
+		var i int
+		var likes int
+		var dislikes int
+		defer st1.Close()
+		for st1.Next() {
+			st1.Scan(&title, &t, &n, &c, &i)
+
+			err := db.DB.QueryRow("SELECT count(*) FROM likes WHERE Postid=(?)", i).Scan(&likes)
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = db.DB.QueryRow("SELECT count(*) FROM dislikes WHERE Postid=(?)", i).Scan(&dislikes)
+			if err != nil {
+				log.Fatal(err)
+			}
+			onepost := models.Post{
+				Title:    title,
+				Text:     t,
+				Name:     n,
+				Category: c,
+				Id:       i,
+				Likes:    likes,
+				Dislikes: dislikes,
+			}
+			res1 = append(res1, onepost)
+
+		}
+
+		return res1
+
+	} else {
+		return posts
+	}
+}

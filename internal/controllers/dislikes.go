@@ -16,7 +16,7 @@ func (controllers *Controllers) Dislikes(w http.ResponseWriter, r *http.Request)
 		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
-	controllers.Service.LikesDislikesService.Dislike(controllers.Service.UserService.FindUserByToken(cookie.Value), id)
+	controllers.Service.PostService.DislikePost(controllers.Service.UserService.FindUserByToken(cookie.Value), id)
 	previousURL := r.Header.Get("Referer")
 	http.Redirect(w, r, previousURL, 302)
 }
