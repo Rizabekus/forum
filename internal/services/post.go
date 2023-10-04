@@ -25,3 +25,33 @@ func (PostService *PostService) CountPosts() int {
 func (PostService *PostService) SelectPostByID(id int) (string, string, string) {
 	return PostService.repo.SelectPostByID(id)
 }
+
+func (PostService *PostService) LikePost(user string, id string) {
+	checklikes := PostService.repo.PostLikeExistence(user, id)
+	checkdislikes := PostService.repo.PostDislikeExistence(user, id)
+
+	if checklikes == false && checkdislikes == true {
+		PostService.repo.AddLikeToPost(user, id)
+		PostService.repo.RemoveDislikeAtPost(user, id)
+
+	} else if checklikes == false && checkdislikes == false {
+		PostService.repo.AddLikeToPost(user, id)
+	} else if checklikes == true && checkdislikes == false {
+		PostService.repo.RemoveLikeAtPost(user, id)
+	}
+}
+
+func (PostService *PostService) DislikePost(user string, id string) {
+	checklikes := PostService.repo.PostLikeExistence(user, id)
+	checkdislikes := PostService.repo.PostDislikeExistence(user, id)
+
+	if checklikes == true && checkdislikes == false {
+		PostService.repo.AddDislikeToPost(user, id)
+		PostService.repo.RemoveLikeAtPost(user, id)
+
+	} else if checklikes == false && checkdislikes == false {
+		PostService.repo.AddDislikeToPost(user, id)
+	} else if checklikes == true && checkdislikes == false {
+		PostService.repo.RemoveDislikeAtPost(user, id)
+	}
+}

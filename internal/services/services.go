@@ -6,19 +6,17 @@ import (
 )
 
 type Services struct {
-	UserService          models.UserService
-	PostService          models.PostService
-	CommentService       models.CommentService
-	LikesDislikesService models.LikesDislikesService
-	CookiesService       models.CookiesService
+	UserService    models.UserService
+	PostService    models.PostService
+	CommentService models.CommentService
+	CookiesService models.CookiesService
 }
 
 func ServiceInstance(repo *repo.Repository) *Services {
 	return &Services{
-		UserService:          CreateUserService(repo.UserRepository),
-		PostService:          CreatePostService(repo.PostRepository),
-		CommentService:       CreateCommentService(repo.CommentRepository),
-		LikesDislikesService: CreateLikesDislikesService(repo.LikesDislikesRepository),
-		CookiesService:       CreateCookiesService(repo.CookiesRepository),
+		UserService:    CreateUserService(repo.UserRepository),
+		PostService:    CreatePostService(repo.PostRepository),
+		CommentService: CreateCommentService(repo.CommentRepository),
+		CookiesService: CreateCookiesService(repo.CookiesRepository),
 	}
 }

@@ -9,20 +9,18 @@ import (
 
 func RepositoryInstance(db *sql.DB) *Repository {
 	return &Repository{
-		UserRepository:          CreateUserRepository(db),
-		PostRepository:          CreatePostRepository(db),
-		CommentRepository:       CreateCommentRepository(db),
-		LikesDislikesRepository: CreateLikesDislikesRepository(db),
-		CookiesRepository:       CreateCookiesRepository(db),
+		UserRepository:    CreateUserRepository(db),
+		PostRepository:    CreatePostRepository(db),
+		CommentRepository: CreateCommentRepository(db),
+		CookiesRepository: CreateCookiesRepository(db),
 	}
 }
 
 type Repository struct {
-	UserRepository          models.UserRepository
-	PostRepository          models.PostRepository
-	CommentRepository       models.CommentRepository
-	LikesDislikesRepository models.LikesDislikesRepository
-	CookiesRepository       models.CookiesRepository
+	UserRepository    models.UserRepository
+	PostRepository    models.PostRepository
+	CommentRepository models.CommentRepository
+	CookiesRepository models.CookiesRepository
 }
 
 // ype Post struct {

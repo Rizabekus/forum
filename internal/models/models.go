@@ -45,15 +45,14 @@ type (
 		CreatePost(cookie string, text string, category string, title string)
 		CountPosts() int
 		SelectPostByID(id int) (string, string, string)
+		LikePost(user string, id string)
+		DislikePost(user string, id string)
 	}
 	CommentService interface {
 		AddComment(name, text string, id int)
 		CollectComments(id int) []Comment
 	}
-	LikesDislikesService interface {
-		Like(user string, id string)
-		Dislike(user string, id string)
-	}
+
 	CookiesService interface {
 		SetCookie(w http.ResponseWriter, cookie *http.Cookie)
 		GetCookie(r *http.Request) *http.Cookie
@@ -74,19 +73,18 @@ type (
 		CreatePost(cookie string, text string, category string, title string)
 		CountPosts() int
 		SelectPostByID(id int) (string, string, string)
+		RemoveDislikeAtPost(user string, id string)
+		RemoveLikeAtPost(user string, id string)
+		AddLikeToPost(user string, id string)
+		AddDislikeToPost(user string, id string)
+		PostDislikeExistence(user string, id string) bool
+		PostLikeExistence(user string, id string) bool
 	}
 	CommentRepository interface {
 		AddComment(name, text string, id int)
 		CollectComments(id int) []Comment
 	}
-	LikesDislikesRepository interface {
-		CheckLikeExistence(user string, id string) bool
-		CheckDislikeExistence(user string, id string) bool
-		RemoveLike(user string, id string)
-		RemoveDislike(user string, id string)
-		AddDislike(user string, id string)
-		AddLike(user string, id string)
-	}
+
 	CookiesRepository interface {
 		DeleteCookie(cookie string)
 	}
