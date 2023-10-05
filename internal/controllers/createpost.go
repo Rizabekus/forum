@@ -11,6 +11,10 @@ func (controllers *Controllers) CreatePost(w http.ResponseWriter, r *http.Reques
 		controllers.ErrorHandler(w, http.StatusMethodNotAllowed)
 		return
 	}
+	if controllers.Service.UserService.CheckUserLogin(r) == false {
+		http.Redirect(w, r, "/signin", 302)
+	}
+
 	cookie, err := r.Cookie("logged-in")
 	if err != nil {
 		controllers.ErrorHandler(w, http.StatusInternalServerError)

@@ -39,6 +39,7 @@ type (
 		ConfirmSignin(Name string, Password string) (bool, string)
 		CreateSession(id, name string)
 		FindUserByToken(cookie string) string
+		CheckUserLogin(r *http.Request) bool
 	}
 	PostService interface {
 		ShowPost() []Post

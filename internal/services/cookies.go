@@ -14,7 +14,7 @@ func CreateCookiesService(repo models.CookiesRepository) *CookiesService {
 	return &CookiesService{repo: repo}
 }
 
-func (CookieService *CookiesService) GetCookie(r *http.Request) *http.Cookie {
+func (CookiesService *CookiesService) GetCookie(r *http.Request) *http.Cookie {
 	cookie, err := r.Cookie("logged-in")
 	if err != nil {
 		log.Fatal(err)
@@ -22,10 +22,10 @@ func (CookieService *CookiesService) GetCookie(r *http.Request) *http.Cookie {
 	return cookie
 }
 
-func (CookieService *CookiesService) SetCookie(w http.ResponseWriter, cookie *http.Cookie) {
+func (CookiesService *CookiesService) SetCookie(w http.ResponseWriter, cookie *http.Cookie) {
 	http.SetCookie(w, cookie)
 }
 
-func (CookieService *CookiesService) DeleteCookie(cookie string) {
-	CookieService.repo.DeleteCookie(cookie)
+func (CookiesService *CookiesService) DeleteCookie(cookie string) {
+	CookiesService.repo.DeleteCookie(cookie)
 }

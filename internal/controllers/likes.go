@@ -10,7 +10,9 @@ func (controllers *Controllers) Likes(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	id := r.FormValue("id")
-
+	if controllers.Service.UserService.CheckUserLogin(r) == false {
+		http.Redirect(w, r, "/", 302)
+	}
 	cookie, err := r.Cookie("logged-in")
 	if err != nil {
 		controllers.ErrorHandler(w, http.StatusInternalServerError)

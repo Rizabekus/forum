@@ -2,6 +2,7 @@ package services
 
 import (
 	"forum/internal/models"
+	"net/http"
 	"regexp"
 )
 
@@ -42,6 +43,7 @@ func (UserService *UserService) ConfirmSignup(Name string, Email string, Passwor
 			return false, "Can only have ASCII characters for Password."
 		}
 	}
+
 	emailRegex := regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 	if emailRegex.MatchString(Email) == false {
 		return false, "Wrong format for Email."
@@ -60,4 +62,13 @@ func (UserService *UserService) CreateSession(id, name string) {
 
 func (UserService *UserService) FindUserByToken(cookie string) string {
 	return UserService.repo.FindUserByToken(cookie)
+}
+
+func (UserService *UserService) CheckUserLogin(r *http.Request) bool {
+	cookie, err := r.Cookie("logged-in")
+	if err == http.ErrNoCookie || cookie.Value == "not-logged" {
+		return false
+	} else {
+		return true
+	}
 }

@@ -9,6 +9,9 @@ func (controllers *Controllers) Dislikes(w http.ResponseWriter, r *http.Request)
 		controllers.ErrorHandler(w, http.StatusMethodNotAllowed)
 		return
 	}
+	if controllers.Service.UserService.CheckUserLogin(r) == false {
+		http.Redirect(w, r, "/", 302)
+	}
 	id := r.FormValue("id")
 
 	cookie, err := r.Cookie("logged-in")

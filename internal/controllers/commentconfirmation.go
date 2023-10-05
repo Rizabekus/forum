@@ -13,6 +13,9 @@ func (controllers *Controllers) CommentConfirmation(w http.ResponseWriter, r *ht
 		w.Write([]byte(http.StatusText(http.StatusMethodNotAllowed)))
 		return
 	}
+	if controllers.Service.UserService.CheckUserLogin(r) == false {
+		http.Redirect(w, r, "/", 302)
+	}
 	cookie, err := r.Cookie("logged-in")
 	if err != nil {
 		controllers.ErrorHandler(w, http.StatusInternalServerError)

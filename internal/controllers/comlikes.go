@@ -10,6 +10,9 @@ func (controllers *Controllers) ComLikes(w http.ResponseWriter, r *http.Request)
 		controllers.ErrorHandler(w, http.StatusMethodNotAllowed)
 		return
 	}
+	if controllers.Service.UserService.CheckUserLogin(r) == false {
+		http.Redirect(w, r, "/", 302)
+	}
 	previousURL := r.Header.Get("Referer")
 	postid := (strings.Split(previousURL, "id="))[1]
 	id := r.FormValue("id")

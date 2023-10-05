@@ -13,6 +13,7 @@ func (controllers *Controllers) PostPage(w http.ResponseWriter, r *http.Request)
 		controllers.ErrorHandler(w, http.StatusMethodNotAllowed)
 		return
 	}
+
 	xurl := strings.Split(r.URL.String(), "id=")
 	if len(xurl) < 2 {
 		controllers.ErrorHandler(w, http.StatusNotFound)
