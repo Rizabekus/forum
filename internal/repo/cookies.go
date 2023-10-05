@@ -14,13 +14,8 @@ func CreateCookiesRepository(db *sql.DB) *cookiesDB {
 }
 
 func (db *cookiesDB) DeleteCookie(cookie string) {
-	tx, err := db.DB.Begin()
+	_, err := db.DB.Exec("DELETE FROM cookies WHERE Id=(?)", cookie)
 	if err != nil {
 		log.Fatal(err)
 	}
-	_, err = db.DB.Exec("DELETE * FROM cookies WHERE Id=(?)", cookie)
-	if err != nil {
-		log.Fatal(err)
-	}
-	tx.Commit()
 }

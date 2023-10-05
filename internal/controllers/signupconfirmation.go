@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"text/template"
 
@@ -19,7 +18,7 @@ func (controllers *Controllers) SignUpConfirmation(w http.ResponseWriter, r *htt
 	email := r.FormValue("UserEmail")
 	password := r.FormValue("UserPassword")
 	rewrittenPassword := r.FormValue("UserRewrittenPassword")
-	fmt.Println("works")
+
 	result, text := controllers.Service.UserService.ConfirmSignup(name, email, password, rewrittenPassword)
 
 	if result == true {
