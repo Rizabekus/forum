@@ -32,6 +32,12 @@ type Post struct {
 	Dislikes int
 }
 
+type User struct {
+	User           string
+	Email          string
+	HashedPassword string
+}
+
 type (
 	UserService interface {
 		AddUser(UserName string, Email string, hashedPassword string)
