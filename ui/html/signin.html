@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-signin-client_id" content="432111077942-0tckr55k722cp6huksj733ovup9mkp64.apps.googleusercontent.com .apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="432111077942-tv4qgb2cg8eoqk34ero9e8m9e8pp2gva.apps.googleusercontent.com">
     
 
     <link rel="stylesheet" href="./templates/css/style.css">
@@ -13,7 +13,7 @@
 <body>
   <div class="container3">
     <div class="login-box">
-      <a href="http://127.0.0.1:8000/">Home</a>
+      <a href="http://localhost:8000/">Home</a>
       
       
       <h1>Login Page</h1>
@@ -33,7 +33,7 @@
       <br>
       <div class="g-signin2" data-onsuccess="onSignIn"></div>
 
-      <a href="http://127.0.0.1:8000/">Sign up</a>
+      <a href="http://localhost:8000/">Sign up</a>
       <script src="https://apis.google.com/js/platform.js" async defer></script>
       <script>function onSignIn(googleUser) {
         var profile = googleUser.getBasicProfile();
@@ -42,6 +42,21 @@
         console.log('Image URL: ' + profile.getImageUrl());
         console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
       }
+      function onFailure(error){
+        console.log(error)
+    }
+
+    function renderButton(){
+        gapi.signin2.render('my-signin', {
+            'scope': 'profile email',
+            'width': 240,
+            'height': 50,
+            'longtitle': true,
+            'theme': 'dark',
+            'onsuccess': onSuccess,
+            'onfailure': onFailure
+        });
+    }
       </script>
     </div>
   </div>

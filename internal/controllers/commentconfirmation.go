@@ -22,7 +22,7 @@ func (controllers *Controllers) CommentConfirmation(w http.ResponseWriter, r *ht
 		return
 	}
 	if cookie.Value == "not-logged" {
-		http.Redirect(w, r, "http://127.0.0.1:8000/signin?", 302)
+		http.Redirect(w, r, "http://localhost:8000/signin?", 302)
 	} else {
 		text := r.FormValue("comment")
 		previousURL := r.Header.Get("Referer")

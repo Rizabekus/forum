@@ -28,7 +28,7 @@ func Routes(c *controllers.Controllers) {
 	mux.HandleFunc("/comlike", c.ComLikes)
 	mux.HandleFunc("/comdislike", c.ComDislikes)
 	mux.HandleFunc("/filter/likes", c.Likes)
-	fmt.Println("http://127.0.0.1:8000")
+	fmt.Println("http://localhost:8000")
 
 	err := http.ListenAndServe(":8000", mux)
 	log.Fatal(err)

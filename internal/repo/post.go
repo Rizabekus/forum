@@ -2,7 +2,6 @@ package repo
 
 import (
 	"database/sql"
-	"fmt"
 	"forum/internal/models"
 	"log"
 )
@@ -54,7 +53,7 @@ func (db *PostDB) ShowPost() []models.Post {
 			Likes:    likes,
 			Dislikes: dislikes,
 		}
-		fmt.Printf("%v likes\n%v dislikes\n", likes, dislikes)
+
 		posts = append(posts, onepost)
 	}
 
