@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-signin-client_id" content="432111077942-tv4qgb2cg8eoqk34ero9e8m9e8pp2gva.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="432111077942-8gih8tkb7o1pt672t11280rdev9jk1cd.apps.googleusercontent.com">
     
 
     <link rel="stylesheet" href="./templates/css/style.css">
@@ -37,25 +37,43 @@
       <script src="https://apis.google.com/js/platform.js" async defer></script>
       <script>function onSignIn(googleUser) {
         var profile = googleUser.getBasicProfile();
-        console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-        console.log('Name: ' + profile.getName());
-        console.log('Image URL: ' + profile.getImageUrl());
-        console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-      }
-      function onFailure(error){
-        console.log(error)
-    }
+        var id = profile.getId();
+        var name = profile.getName();
+        var imageUrl = profile.getImageUrl();
+        var email = profile.getEmail();
+      
+        var form = document.createElement("form");
+    form.method = "POST";
+    form.action = "/googleauth";
 
-    function renderButton(){
-        gapi.signin2.render('my-signin', {
-            'scope': 'profile email',
-            'width': 240,
-            'height': 50,
-            'longtitle': true,
-            'theme': 'dark',
-            'onsuccess': onSuccess,
-            'onfailure': onFailure
-        });
+    // Create hidden input fields for the user data
+    var idInput = document.createElement("input");
+    idInput.type = "hidden";
+    idInput.name = "id";
+    idInput.value = id;
+    form.appendChild(idInput);
+
+    var nameInput = document.createElement("input");
+    nameInput.type = "hidden";
+    nameInput.name = "name";
+    nameInput.value = name;
+    form.appendChild(nameInput);
+
+    var imageUrlInput = document.createElement("input");
+    imageUrlInput.type = "hidden";
+    imageUrlInput.name = "imageUrl";
+    imageUrlInput.value = imageUrl;
+    form.appendChild(imageUrlInput);
+
+    var emailInput = document.createElement("input");
+    emailInput.type = "hidden";
+    emailInput.name = "email";
+    emailInput.value = email;
+    form.appendChild(emailInput);
+
+    // Append the form to the document and submit it
+    document.body.appendChild(form);
+    form.submit();
     }
       </script>
     </div>
