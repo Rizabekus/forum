@@ -31,51 +31,10 @@
       </form>
 
       <br>
-      <div class="g-signin2" data-onsuccess="onSignIn"></div>
+      
 
       <a href="http://localhost:8000/">Sign up</a>
-      <script src="https://apis.google.com/js/platform.js" async defer></script>
-      <script>function onSignIn(googleUser) {
-        var profile = googleUser.getBasicProfile();
-        var id = profile.getId();
-        var name = profile.getName();
-        var imageUrl = profile.getImageUrl();
-        var email = profile.getEmail();
-      
-        var form = document.createElement("form");
-    form.method = "POST";
-    form.action = "/googleauth";
-
-    // Create hidden input fields for the user data
-    var idInput = document.createElement("input");
-    idInput.type = "hidden";
-    idInput.name = "id";
-    idInput.value = id;
-    form.appendChild(idInput);
-
-    var nameInput = document.createElement("input");
-    nameInput.type = "hidden";
-    nameInput.name = "name";
-    nameInput.value = name;
-    form.appendChild(nameInput);
-
-    var imageUrlInput = document.createElement("input");
-    imageUrlInput.type = "hidden";
-    imageUrlInput.name = "imageUrl";
-    imageUrlInput.value = imageUrl;
-    form.appendChild(imageUrlInput);
-
-    var emailInput = document.createElement("input");
-    emailInput.type = "hidden";
-    emailInput.name = "email";
-    emailInput.value = email;
-    form.appendChild(emailInput);
-
-    // Append the form to the document and submit it
-    document.body.appendChild(form);
-    form.submit();
-    }
-      </script>
+     
     </div>
   </div>
 <body>

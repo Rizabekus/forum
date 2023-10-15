@@ -42,7 +42,8 @@
           <p2>{{.Text}}</p2>
             <p2>{{.Category}}</p2>
                <a href="/comments?id={{.Id}}">View Comments</a>
-                
+                <br>
+                <img src="data:image/png;base64,{{.Image}}" alt="Embedded Image">
                  <form action="/signin" method="get">
                
                 <button type="submit">Like</button>

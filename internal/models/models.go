@@ -30,6 +30,7 @@ type Post struct {
 	Id       int
 	Likes    int
 	Dislikes int
+	Image    string
 }
 
 type User struct {
@@ -49,7 +50,7 @@ type (
 	}
 	PostService interface {
 		ShowPost() []Post
-		CreatePost(cookie string, text string, category string, title string)
+		CreatePost(cookie string, text string, category string, title string, image []byte)
 		CountPosts() int
 		SelectPostByID(id int) (string, string, string)
 		LikePost(user string, id string)
@@ -80,7 +81,7 @@ type (
 	}
 	PostRepository interface {
 		ShowPost() []Post
-		CreatePost(cookie string, text string, category string, title string)
+		CreatePost(cookie string, text string, category string, title string, image []byte)
 		CountPosts() int
 		SelectPostByID(id int) (string, string, string)
 		RemoveDislikeAtPost(user string, id string)

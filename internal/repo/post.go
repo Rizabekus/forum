@@ -2,6 +2,7 @@ package repo
 
 import (
 	"database/sql"
+	"encoding/base64"
 	"forum/internal/models"
 	"log"
 )
@@ -32,10 +33,11 @@ func (db *PostDB) ShowPost() []models.Post {
 	var i int
 	var likes int
 	var dislikes int
+	var img []byte
 
 	defer row.Close()
 	for row.Next() {
-		row.Scan(&title, &t, &n, &c, &i)
+		row.Scan(&title, &t, &n, &c, &i, &img)
 		err := db.DB.QueryRow("SELECT count(*) FROM likes WHERE Postid=(?)", i).Scan(&likes)
 		if err != nil {
 			log.Fatal(err)
@@ -44,6 +46,7 @@ func (db *PostDB) ShowPost() []models.Post {
 		if err != nil {
 			log.Fatal(err)
 		}
+
 		onepost := models.Post{
 			Title:    title,
 			Text:     t,
@@ -52,6 +55,7 @@ func (db *PostDB) ShowPost() []models.Post {
 			Id:       i,
 			Likes:    likes,
 			Dislikes: dislikes,
+			Image:    "data:image/png;base64," + base64.StdEncoding.EncodeToString(img),
 		}
 
 		posts = append(posts, onepost)
@@ -62,7 +66,7 @@ func (db *PostDB) ShowPost() []models.Post {
 	return posts
 }
 
-func (db *PostDB) CreatePost(cookie string, text string, category string, title string) {
+func (db *PostDB) CreatePost(cookie string, text string, category string, title string, image []byte) {
 	Name, err := db.DB.Query("SELECT lame FROM cookies WHERE Id = ( ? )", cookie)
 	if err != nil {
 		log.Fatal(err)
@@ -86,7 +90,7 @@ func (db *PostDB) CreatePost(cookie string, text string, category string, title 
 		Flag.Scan(&flag)
 	}
 
-	_, err = db.DB.Exec("INSERT INTO posts (Title,Post,Namae,Category,Id) VALUES (?, ?, ?, ?, ? )", title, text, name, category, flag+1)
+	_, err = db.DB.Exec("INSERT INTO posts (Title,Post,Namae,Category,Id,Image) VALUES (?, ?, ?, ?, ? )", title, text, name, category, flag+1, image)
 	if err != nil {
 		log.Fatal(err)
 	}
