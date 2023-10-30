@@ -13,12 +13,7 @@ func (controllers *Controllers) PostConfirmation(w http.ResponseWriter, r *http.
 		controllers.ErrorHandler(w, http.StatusMethodNotAllowed)
 		return
 	}
-	if err := r.ParseMultipartForm(20 * 1024 * 1024); err != nil {
-		// redirect to the same page and add text asking for file less than 20mb
-		fmt.Println("qweqweqw")
-		controllers.ErrorHandler(w, http.StatusInternalServerError)
-		return
-	}
+
 	cookie, err := r.Cookie("logged-in")
 
 	title := r.FormValue("title")
@@ -26,7 +21,7 @@ func (controllers *Controllers) PostConfirmation(w http.ResponseWriter, r *http.
 	cat := r.FormValue("cars")
 	image, _, err := r.FormFile("image")
 	if err != nil {
-		fmt.Println("qweqweqw")
+		fmt.Println("qweqweqw2")
 		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
