@@ -5,6 +5,7 @@ import (
 	"forum/pkg"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"text/template"
 )
 
@@ -22,11 +23,9 @@ func (controllers *Controllers) PostConfirmation(w http.ResponseWriter, r *http.
 	err = r.ParseMultipartForm(20 << 20) // max size 20MB
 	if err != nil {
 		// over 20mb
-		fmt.Println(err)
 		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
-
 	err = r.ParseForm()
 	if err != nil {
 		fmt.Println(err)
@@ -36,14 +35,40 @@ func (controllers *Controllers) PostConfirmation(w http.ResponseWriter, r *http.
 	text := r.FormValue("convert")
 	cat := r.FormValue("cars")
 
+	// ErrMissingFile := errors.New("http: no such file")
 	image, _, err := r.FormFile("image")
 	if err != nil {
-		fmt.Println(err)
-		controllers.ErrorHandler(w, http.StatusInternalServerError)
-		return
-	}
+		if err == http.ErrMissingFile {
+			ourImage, err := os.Open("./ui/NoImage.jpg")
+			if err != nil {
+				controllers.ErrorHandler(w, http.StatusInternalServerError)
+				return
+			}
+			imageData, err := ioutil.ReadAll(ourImage)
+			if err != nil {
+				controllers.ErrorHandler(w, http.StatusInternalServerError)
+				return
+			}
 
-	defer image.Close()
+			checker, t := pkg.PostChecker(title, text)
+			if checker == false {
+				tmpl, err := template.ParseFiles("./ui/html/create.html")
+				if err != nil {
+					controllers.ErrorHandler(w, http.StatusInternalServerError)
+					return
+				}
+				tmpl.Execute(w, t)
+				return
+			} else {
+				controllers.Service.PostService.CreatePost(cookie.Value, text, cat, title, imageData)
+				http.Redirect(w, r, "/", 302)
+				return
+			}
+		} else {
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
+			return
+		}
+	}
 
 	// Read the file content into a []byte
 
@@ -52,7 +77,7 @@ func (controllers *Controllers) PostConfirmation(w http.ResponseWriter, r *http.
 		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
-
+	image.Close()
 	checker, t := pkg.PostChecker(title, text)
 	if checker == false {
 		tmpl, err := template.ParseFiles("./ui/html/create.html")
@@ -61,8 +86,10 @@ func (controllers *Controllers) PostConfirmation(w http.ResponseWriter, r *http.
 			return
 		}
 		tmpl.Execute(w, t)
+		return
 	} else {
 		controllers.Service.PostService.CreatePost(cookie.Value, text, cat, title, imageData)
 		http.Redirect(w, r, "/", 302)
+		return
 	}
 }
