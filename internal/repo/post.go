@@ -38,6 +38,7 @@ func (db *PostDB) ShowPost() []models.Post {
 	defer row.Close()
 	for row.Next() {
 		row.Scan(&title, &t, &n, &c, &i, &img)
+
 		err := db.DB.QueryRow("SELECT count(*) FROM likes WHERE Postid=(?)", i).Scan(&likes)
 		if err != nil {
 			log.Println("Error in ShowPost")
@@ -62,7 +63,10 @@ func (db *PostDB) ShowPost() []models.Post {
 
 		posts = append(posts, onepost)
 	}
-
+	// for i := range posts {
+	// 	fmt.Println("Info: ", posts[i].Title, posts[i].Text, posts[i].Name, posts[i].Category, posts[i].Id, posts[i].Likes, posts[i].Dislikes)
+	// 	fmt.Println("Image Info: ", len(posts[i].Image))
+	// }
 	// tx.Commit()
 
 	return posts
@@ -204,9 +208,10 @@ func (db *PostDB) Filter(namecookie string, likesdislikes []string, categories [
 	var dislikes int
 	var posts []models.Post
 	var ids []int
+	var image []byte
 
 	for rows.Next() {
-		rows.Scan(&title, &t, &n, &c, &i)
+		rows.Scan(&title, &t, &n, &c, &i, &image)
 		x := false
 		for _, el := range ids {
 			if el == i {
@@ -235,6 +240,7 @@ func (db *PostDB) Filter(namecookie string, likesdislikes []string, categories [
 			Id:       i,
 			Likes:    likes,
 			Dislikes: dislikes,
+			Image:    "data:image/png;base64," + base64.StdEncoding.EncodeToString(image),
 		}
 		posts = append(posts, onepost)
 

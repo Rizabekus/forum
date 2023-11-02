@@ -65,7 +65,7 @@ func (PostService *PostService) Filter(namecookie string, likesdislikes []string
 		formattedlikes = append(formattedlikes, likesdislikes[i]+"s.Postid")
 	}
 
-	text := "SELECT posts.Title, posts.Post, posts.Namae, posts.Category, posts.Id from posts "
+	text := "SELECT posts.Title, posts.Post, posts.Namae, posts.Category, posts.Id, posts.Image from posts "
 
 	if len(likesdislikes) == 2 {
 		text = text + "INNER JOIN likes on posts.Id=likes.Postid INNER JOIN dislikes on posts.Id=dislikes.Postid"
