@@ -10,6 +10,22 @@ body{
     background-size: 300% 300%;
     animation: color 50s ease-in-out infinite;
 }
+
+/* footer {
+  background-color: #fff;
+  padding: 20px;
+  margin: 0;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+} */
+
+.bodyFlex {
+  display: flex;
+  flex-direction: column;
+}
 @keyframes color{
     0%{
         background-position: 0 50%;
@@ -111,10 +127,12 @@ button {
   }
 
   .container1 {
+    width: 95%;
+    height: 100vh;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: right;
     align-items: center;
     min-height: auto; /* Set a minimum height to occupy the whole viewport */
   }
@@ -132,13 +150,18 @@ button {
   word-wrap: break-word;
   }
 
+  .flexConteiner{
+    display: flex;
+    flex-direction: row;
+  }
 
   .between {
-    position: absolute;
-  top: 30%;
-  left:10%; /* Adjust the left position as needed */
-  transform: translate(-50%, -50%);
-  background-color: #fff;
+    /* position: absolute; */
+    position: fixed;
+  /* top: 30%;
+  left:10%; Adjust the left position as needed */
+  /* transform: translate(-50%, -50%); */
+  background-color: rgba(255, 255, 255, 0.281);
   padding: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
@@ -146,6 +169,7 @@ button {
   max-width: 90%; 
   z-index: 1;
   }
+
   
   .butt {
     margin-bottom: 20px;

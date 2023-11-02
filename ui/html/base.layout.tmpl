@@ -13,20 +13,18 @@
     <title>Forum</title>
 </head>
 <body>
+<div class="bodyFlex">
     <div class="container">
-    {{template "title".}}
-    <div class="forumname">
-    <header>
-        <h1>Forum</h1>
-    </header>
-    </div>
-    </div>
-    <div class="posts">
-       
+        {{template "title".}}
+        <div class="forumname"> 
+            <header>
+                <h1>Forum</h1>
+            </header>
+        </div>
     </div>
     {{template "main" .}}
-    
 </div>
+
 </body>
 </html>
 {{end}}

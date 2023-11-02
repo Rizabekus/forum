@@ -263,7 +263,7 @@ func (db *PostDB) Filter(namecookie string, likesdislikes []string, categories [
 		name := namecookie
 
 		var res1 []models.Post
-		st1, err := db.DB.Query("SELECT Title, Post,Namae,Category,Id FROM posts WHERE Namae=(?)", name)
+		st1, err := db.DB.Query("SELECT Title, Post,Namae,Category,Id, Image FROM posts WHERE Namae=(?)", name)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -274,9 +274,10 @@ func (db *PostDB) Filter(namecookie string, likesdislikes []string, categories [
 		var i int
 		var likes int
 		var dislikes int
+		var image []byte
 		defer st1.Close()
 		for st1.Next() {
-			st1.Scan(&title, &t, &n, &c, &i)
+			st1.Scan(&title, &t, &n, &c, &i, &image)
 
 			err := db.DB.QueryRow("SELECT count(*) FROM likes WHERE Postid=(?)", i).Scan(&likes)
 			if err != nil {
@@ -294,6 +295,7 @@ func (db *PostDB) Filter(namecookie string, likesdislikes []string, categories [
 				Id:       i,
 				Likes:    likes,
 				Dislikes: dislikes,
+				Image:    "data:image/png;base64," + base64.StdEncoding.EncodeToString(image),
 			}
 			res1 = append(res1, onepost)
 

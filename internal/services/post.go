@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"forum/internal/models"
 )
 
@@ -65,7 +66,7 @@ func (PostService *PostService) Filter(namecookie string, likesdislikes []string
 		formattedlikes = append(formattedlikes, likesdislikes[i]+"s.Postid")
 	}
 
-	text := "SELECT posts.Title, posts.Post, posts.Namae, posts.Category, posts.Id, posts.Image from posts "
+	text := "SELECT * FROM posts "
 
 	if len(likesdislikes) == 2 {
 		text = text + "INNER JOIN likes on posts.Id=likes.Postid INNER JOIN dislikes on posts.Id=dislikes.Postid"
@@ -119,6 +120,7 @@ func (PostService *PostService) Filter(namecookie string, likesdislikes []string
 
 		}
 	}
+	fmt.Println(text)
 	posts := PostService.repo.Filter(namecookie, likesdislikes, categories, yourposts, text)
 	return posts
 }

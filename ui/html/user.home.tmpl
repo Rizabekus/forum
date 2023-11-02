@@ -8,11 +8,12 @@
 </div>
 {{end}}
 {{define "main"}}
- <div class="between">
- <div class="butt">
-            <form action="/create">
+<div class="flexConteiner"> 
+  <div class="between">
+    <div class="butt">
+      <form action="/create">
             <button>createpost</button>
-        </form>
+          </form>
         </div>
           <form action="/filter" method="GET">
           <p1>By category:</p1>
@@ -62,7 +63,8 @@
         </div>
         
         <br>
-       {{end}}
+        {{end}}
+      </div>
        
     </div>
     {{end}}
