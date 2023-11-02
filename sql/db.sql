@@ -12,7 +12,7 @@ CREATE TABLE posts(
     Namae VARCHAR(50) NOT NULL,
     Category VARCHAR(40) NOT NULL,
     Id INT NOT NULL,
-    Img BLOB NOT NULL
+    Image BLOB NOT NULL
 );
 CREATE TABLE IF NOT EXISTS cookies   ( 
 	Id VARCHAR(50),

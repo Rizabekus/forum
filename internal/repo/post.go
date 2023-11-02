@@ -40,10 +40,12 @@ func (db *PostDB) ShowPost() []models.Post {
 		row.Scan(&title, &t, &n, &c, &i, &img)
 		err := db.DB.QueryRow("SELECT count(*) FROM likes WHERE Postid=(?)", i).Scan(&likes)
 		if err != nil {
+			log.Println("Error in ShowPost")
 			log.Fatal(err)
 		}
 		err = db.DB.QueryRow("SELECT count(*) FROM dislikes WHERE Postid=(?)", i).Scan(&dislikes)
 		if err != nil {
+			log.Println("Error in ShowPost")
 			log.Fatal(err)
 		}
 
@@ -90,7 +92,7 @@ func (db *PostDB) CreatePost(cookie string, text string, category string, title 
 		Flag.Scan(&flag)
 	}
 
-	_, err = db.DB.Exec("INSERT INTO posts (Title,Post,Namae,Category,Id,Image) VALUES (?, ?, ?, ?, ? )", title, text, name, category, flag+1, image)
+	_, err = db.DB.Exec("INSERT INTO posts (Title,Post,Namae,Category,Id,Image) VALUES (?, ?, ?, ?, ?, ? )", title, text, name, category, flag+1, image)
 	if err != nil {
 		log.Fatal(err)
 	}

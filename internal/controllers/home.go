@@ -87,8 +87,6 @@ func (controllers *Controllers) Homepage(w http.ResponseWriter, r *http.Request)
 			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
-
 		tmpl.Execute(w, controllers.Service.PostService.ShowPost())
-
 	}
 }

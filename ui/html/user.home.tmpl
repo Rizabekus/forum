@@ -47,7 +47,8 @@
             </div>
                <a href="/comments?id={{.Id}}">View Comments</a>
                <br>
-               <img src="data:image/png;base64,{{.Image}}" alt="Embedded Image">
+               <img style='display:block; width:800px;height:450px;' id='base64image'
+       src={{.Image}} />
                  <form action="/like" method="post">
                 <input type="hidden" name="id" value={{.Id}}>
                 <button type="submit">Like</button>

@@ -19,7 +19,7 @@ cd forum
 
 sqlite3 sql/database.db < sql/db.sql
 
-go run .
+go run ./cmd/web
 ```
 ### Usage with Docker
 * To build the image you need to write: 

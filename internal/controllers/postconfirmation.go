@@ -15,13 +15,30 @@ func (controllers *Controllers) PostConfirmation(w http.ResponseWriter, r *http.
 	}
 
 	cookie, err := r.Cookie("logged-in")
+	if err != nil {
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
+		return
+	}
+	err = r.ParseMultipartForm(20 << 20) // max size 20MB
+	if err != nil {
+		// over 20mb
+		fmt.Println(err)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
+		return
+	}
 
+	err = r.ParseForm()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	title := r.FormValue("title")
 	text := r.FormValue("convert")
 	cat := r.FormValue("cars")
+
 	image, _, err := r.FormFile("image")
 	if err != nil {
-		fmt.Println("qweqweqw2")
+		fmt.Println(err)
 		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
@@ -29,12 +46,13 @@ func (controllers *Controllers) PostConfirmation(w http.ResponseWriter, r *http.
 	defer image.Close()
 
 	// Read the file content into a []byte
+
 	imageData, err := ioutil.ReadAll(image)
 	if err != nil {
 		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
-	fmt.Println(image)
+
 	checker, t := pkg.PostChecker(title, text)
 	if checker == false {
 		tmpl, err := template.ParseFiles("./ui/html/create.html")
