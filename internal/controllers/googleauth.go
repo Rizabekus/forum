@@ -24,6 +24,7 @@ func (controllers *Controllers) GoogleCallback(w http.ResponseWriter, r *http.Re
 	// Exchange the code for an access token
 	tokenURL := "https://accounts.google.com/o/oauth2/token"
 	data := fmt.Sprintf("code=%s&client_id=%s&client_secret=%s&redirect_uri=%s&grant_type=authorization_code", code, clientID, clientSecret, redirectURI)
+
 	resp, err := http.Post(tokenURL, "application/x-www-form-urlencoded", strings.NewReader(data))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -48,5 +49,26 @@ func (controllers *Controllers) GoogleCallback(w http.ResponseWriter, r *http.Re
 
 	// Now you can use the accessToken to make authenticated requests to Google APIs
 	// You can use the accessToken in the Authorization header or as a query parameter in your requests.
-	fmt.Fprintf(w, "Access Token: %s", accessToken)
+	req, err := http.NewRequest("GET", "https://www.googleapis.com/oauth2/v3/userinfo", nil)
+	req.Header.Set("Authorization", "Bearer "+accessToken)
+
+	client := &http.Client{}
+	response, err := client.Do(req)
+	if err != nil {
+		// Handle the error, e.g., log it or return an error response.
+	}
+	defer response.Body.Close()
+	if response.StatusCode == http.StatusOK {
+		// Read the response body
+		body, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			// Handle the error, e.g., log it or return an error response.
+		}
+
+		// Convert the response body to a string and print it
+		responseContent := string(body)
+		fmt.Println(responseContent)
+	} else {
+		// Handle non-200 status codes as needed
+	}
 }
