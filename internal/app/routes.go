@@ -29,6 +29,7 @@ func Routes(c *controllers.Controllers) {
 	mux.HandleFunc("/comdislike", c.ComDislikes)
 	mux.HandleFunc("/filter/likes", c.Likes)
 	mux.HandleFunc("/googleauth", c.Googleauth)
+	mux.HandleFunc("/googlecallback", c.GoogleCallback)
 	fmt.Println("http://localhost:8000")
 
 	err := http.ListenAndServe(":8000", mux)

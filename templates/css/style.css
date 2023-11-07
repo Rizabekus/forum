@@ -405,3 +405,17 @@ button {
   .cat{
     color:gray 
   }
+
+  .google-signup-button {
+    background-color: #4285F4;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 2px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+}
+.google-signup-button:hover {
+    background-color: #357ABD;
+}

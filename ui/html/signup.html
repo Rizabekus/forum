@@ -31,12 +31,22 @@
             <p>Rewrite your password</p>
             <input type="password" name="UserRewrittenPassword" maxlength="40">
           </div>
-          <button type="submit">Send</button>
+          <button type="submit">Sign up</button>
         </form>
+      <br>
+      <button class="google-signup-button" onclick="redirectToGoogleSignup()">Sign Up with Google</button>
       </div>
+      
     </div>
   </body>
-
+  <script>
+    // JavaScript function to redirect to the Google Sign-Up URL
+    function redirectToGoogleSignup() {
+        // Replace 'http://localhost:8000/googleauth' with the URL you want to redirect to
+        var googleSignupURL = 'http://localhost:8000/googleauth';
+        window.location.href = googleSignupURL;
+    }
+</script>
     
 </body>
 
