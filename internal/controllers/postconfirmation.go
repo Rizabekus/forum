@@ -72,7 +72,7 @@ func (controllers *Controllers) PostConfirmation(w http.ResponseWriter, r *http.
 	}
 
 	extention := strings.Split(header.Filename, ".")[len(strings.Split(header.Filename, "."))-1]
-	fmt.Println(extention)
+
 	if extention != "gif" && extention != "jpg" && extention != "png" && extention != "jpeg" {
 		tmpl, err := template.ParseFiles("./ui/html/create.html")
 		if err != nil {
