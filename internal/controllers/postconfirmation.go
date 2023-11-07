@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 	"text/template"
 )
 
@@ -36,7 +37,7 @@ func (controllers *Controllers) PostConfirmation(w http.ResponseWriter, r *http.
 	cat := r.FormValue("cars")
 
 	// ErrMissingFile := errors.New("http: no such file")
-	image, _, err := r.FormFile("image")
+	image, header, err := r.FormFile("image")
 	if err != nil {
 		if err == http.ErrMissingFile {
 			ourImage, err := os.Open("./ui/NoImage.jpg")
@@ -68,6 +69,18 @@ func (controllers *Controllers) PostConfirmation(w http.ResponseWriter, r *http.
 			controllers.ErrorHandler(w, http.StatusInternalServerError)
 			return
 		}
+	}
+
+	extention := strings.Split(header.Filename, ".")[len(strings.Split(header.Filename, "."))-1]
+	fmt.Println(extention)
+	if extention != "gif" && extention != "jpg" && extention != "png" {
+		tmpl, err := template.ParseFiles("./ui/html/create.html")
+		if err != nil {
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
+			return
+		}
+		tmpl.Execute(w, "Wrong file for image! Only jpg, png, gif formats!")
+		return
 	}
 
 	// Read the file content into a []byte
