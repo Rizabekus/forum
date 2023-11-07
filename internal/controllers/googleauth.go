@@ -34,41 +34,46 @@ func (controllers *Controllers) GoogleCallback(w http.ResponseWriter, r *http.Re
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
 
 	var tokenResponse map[string]interface{}
 	err = json.Unmarshal(body, &tokenResponse)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
 		return
 	}
 
 	accessToken := tokenResponse["access_token"].(string)
 
-	// Now you can use the accessToken to make authenticated requests to Google APIs
-	// You can use the accessToken in the Authorization header or as a query parameter in your requests.
 	req, err := http.NewRequest("GET", "https://www.googleapis.com/oauth2/v3/userinfo", nil)
 	req.Header.Set("Authorization", "Bearer "+accessToken)
 
 	client := &http.Client{}
 	response, err := client.Do(req)
 	if err != nil {
-		// Handle the error, e.g., log it or return an error response.
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
+		return
 	}
 	defer response.Body.Close()
 	if response.StatusCode == http.StatusOK {
-		// Read the response body
+
 		body, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			// Handle the error, e.g., log it or return an error response.
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
+			return
 		}
 
-		// Convert the response body to a string and print it
-		responseContent := string(body)
-		fmt.Println(responseContent)
+		var xx map[string]interface{}
+		err = json.Unmarshal(body, &xx)
+		if err != nil {
+			controllers.ErrorHandler(w, http.StatusInternalServerError)
+			return
+		}
+		fmt.Println(xx["email"])
 	} else {
-		// Handle non-200 status codes as needed
+		controllers.ErrorHandler(w, http.StatusInternalServerError)
+		return
 	}
 }
