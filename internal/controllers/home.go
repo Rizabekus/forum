@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"database/sql"
 	"net/http"
 	"text/template"
 	"time"
@@ -46,36 +45,13 @@ func (controllers *Controllers) Homepage(w http.ResponseWriter, r *http.Request)
 	} else {
 
 		if time.Now().After(cookie.Expires) {
-			// DeleteByID
-			db, err := sql.Open("sqlite3", "./sql/database.db")
-
-			tx, err := db.Begin()
-			if err != nil {
-				controllers.ErrorHandler(w, http.StatusInternalServerError)
-				return
-			}
-			db.Exec("Delete * from cookies where Id = ( ? )", cookie.Value)
-			tx.Commit()
+			controllers.Service.CookiesService.DeleteCookie(cookie.Value)
 
 			cookie = &http.Cookie{
 				Name:  "logged-in",
 				Value: "not-logged",
 			}
 
-		}
-
-		c := cookie.Value
-		db, err := sql.Open("sqlite3", "./sql/database.db")
-		var name string
-		// SelectUserByID
-		Name, err := db.Query("SELECT lame FROM cookies WHERE Id = ( ? )", c)
-		if err != nil {
-			controllers.ErrorHandler(w, http.StatusInternalServerError)
-			return
-		}
-		defer Name.Close()
-		for Name.Next() {
-			Name.Scan(&name)
 		}
 
 		files := []string{
