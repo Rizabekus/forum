@@ -45,7 +45,7 @@ type (
 		AddUser(UserName string, Email string, hashedPassword string)
 		ConfirmSignup(Name string, Email string, Password string, RewrittenPassword string) (bool, string)
 		ConfirmSignin(Name string, Password string) (bool, string)
-		CreateSession(id, name string)
+		CreateSession(id string, name string)
 		FindUserByToken(cookie string) string
 		CheckUserLogin(r *http.Request) bool
 	}
@@ -77,7 +77,7 @@ type (
 		AddUser(UserName string, Email string, hashedPassword string)
 		ConfirmSignup(Name string, Email string, Password string, RewrittenPassword string) (bool, string)
 		ConfirmSignin(Name string, Password string) (bool, string)
-		CreateSession(id, name string)
+		CreateSession(id string, name string)
 		FindUserByToken(cookie string) string
 	}
 	PostRepository interface {

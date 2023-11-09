@@ -56,7 +56,7 @@ func (UserService *UserService) ConfirmSignin(Name string, Password string) (boo
 	return UserService.repo.ConfirmSignin(Name, Password)
 }
 
-func (UserService *UserService) CreateSession(id, name string) {
+func (UserService *UserService) CreateSession(id string, name string) {
 	UserService.repo.CreateSession(id, name)
 }
 

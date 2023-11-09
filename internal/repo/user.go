@@ -25,17 +25,19 @@ func (UserDB *UserDB) AddUser(UserName string, Email string, hashedPassword stri
 	statement.Exec(UserName, Email, hashedPassword)
 }
 
-func (UserDB *UserDB) CreateSession(id, name string) {
-	tx, err := UserDB.DB.Begin()
+func (UserDB *UserDB) CreateSession(id string, name string) {
+	fmt.Println(id, name, "++++")
+
+	statement1, err := UserDB.DB.Prepare("INSERT INTO cookies (Id, lame) VALUES ($1, $2)")
 	if err != nil {
+		fmt.Println("ERR TUT")
 		log.Fatal(err)
 	}
 
-	_, err = UserDB.DB.Exec("INSERT INTO cookies (Id, lame) VALUES (?, ?)", id, name)
+	_, err = statement1.Exec(id, name)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
-	tx.Commit()
 }
 
 func (UserDB *UserDB) ConfirmSignup(Name string, Email string, Password string, RewrittenPassword string) (bool, string) {

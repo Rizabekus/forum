@@ -15,8 +15,8 @@ CREATE TABLE posts(
     Image BLOB NOT NULL
 );
 CREATE TABLE IF NOT EXISTS cookies   ( 
-	Id VARCHAR(50),
-	lame VARCHAR(50)
+	Id TEXT,
+	lame TEXT
 );
 CREATE TABLE comments(
     Name VARCHAR(30) NOT NULL,

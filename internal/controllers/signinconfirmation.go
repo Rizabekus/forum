@@ -27,8 +27,9 @@ func (controllers *Controllers) SignInConfirmation(w http.ResponseWriter, r *htt
 
 		controllers.Service.UserService.CreateSession(u2, name)
 
-		cookie := &http.Cookie{Name: "logged-in", Value: u2, Expires: time.Now().Add(365 * 24 * time.Hour)}
+		cookie := &http.Cookie{Name: "logged-in", Value: u2, Expires: time.Now().Add(365 * 24 * time.Hour), Path: "/"}
 		http.SetCookie(w, cookie)
+
 		http.Redirect(w, r, "/", 302)
 	} else {
 		tmpl, err := template.ParseFiles("./ui/html/signin.html")
