@@ -7,6 +7,7 @@ type Postpage struct {
 	Post     string
 	Name     string
 	Comments []Comment
+	Image    string
 }
 
 type ErrorStruct struct {
@@ -52,7 +53,7 @@ type (
 		ShowPost() []Post
 		CreatePost(cookie string, text string, category string, title string, image []byte)
 		CountPosts() int
-		SelectPostByID(id int) (string, string, string)
+		SelectPostByID(id int) (string, string, string, string)
 		LikePost(user string, id string)
 		DislikePost(user string, id string)
 		Filter(namecookie string, likesdislikes []string, categories []string, yourposts []string) []Post
@@ -83,7 +84,7 @@ type (
 		ShowPost() []Post
 		CreatePost(cookie string, text string, category string, title string, image []byte)
 		CountPosts() int
-		SelectPostByID(id int) (string, string, string)
+		SelectPostByID(id int) (string, string, string, string)
 		RemoveDislikeAtPost(user string, id string)
 		RemoveLikeAtPost(user string, id string)
 		AddLikeToPost(user string, id string)

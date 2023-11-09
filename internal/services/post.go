@@ -25,7 +25,7 @@ func (PostService *PostService) CountPosts() int {
 	return PostService.repo.CountPosts()
 }
 
-func (PostService *PostService) SelectPostByID(id int) (string, string, string) {
+func (PostService *PostService) SelectPostByID(id int) (string, string, string, string) {
 	return PostService.repo.SelectPostByID(id)
 }
 

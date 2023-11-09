@@ -25,7 +25,7 @@ func (controllers *Controllers) PostPage(w http.ResponseWriter, r *http.Request)
 		controllers.ErrorHandler(w, http.StatusNotFound)
 		return
 	}
-	title, text, name := controllers.Service.PostService.SelectPostByID(id)
+	title, text, name, image := controllers.Service.PostService.SelectPostByID(id)
 
 	if r.URL.String() != "/comments?id="+strconv.Itoa(id) {
 		controllers.ErrorHandler(w, http.StatusNotFound)
@@ -50,6 +50,7 @@ func (controllers *Controllers) PostPage(w http.ResponseWriter, r *http.Request)
 		Post:     text,
 		Name:     name,
 		Comments: comments,
+		Image:    image,
 	}
 
 	err = tmp.Execute(w, result)

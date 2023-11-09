@@ -22,7 +22,7 @@ func (db *PostDB) ShowPost() []models.Post {
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
-	row, err := db.DB.Query("SELECT * FROM posts")
+	row, err := db.DB.Query("SELECT * FROM posts ORDER BY Id DESC")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -116,8 +116,8 @@ func (db *PostDB) CountPosts() int {
 	return i
 }
 
-func (db *PostDB) SelectPostByID(id int) (string, string, string) {
-	qu, err := db.DB.Query("select Title, Post,Namae from posts where Id=(?)", id)
+func (db *PostDB) SelectPostByID(id int) (string, string, string, string) {
+	qu, err := db.DB.Query("select Title, Post, Namae, Image from posts where Id=(?)", id)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -125,10 +125,11 @@ func (db *PostDB) SelectPostByID(id int) (string, string, string) {
 	var title string
 	var text string
 	var name string
+	var image []byte
 	for qu.Next() {
-		qu.Scan(&title, &text, &name)
+		qu.Scan(&title, &text, &name, &image)
 	}
-	return title, text, name
+	return title, text, name, "data:image/png;base64," + base64.StdEncoding.EncodeToString(image)
 }
 
 func (db *PostDB) PostLikeExistence(user string, id string) bool {
