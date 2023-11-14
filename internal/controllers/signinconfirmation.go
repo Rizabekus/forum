@@ -1,11 +1,10 @@
 package controllers
 
 import (
+	"forum/pkg"
 	"net/http"
 	"text/template"
 	"time"
-
-	"github.com/gofrs/uuid"
 )
 
 func (controllers *Controllers) SignInConfirmation(w http.ResponseWriter, r *http.Request) {
@@ -18,13 +17,13 @@ func (controllers *Controllers) SignInConfirmation(w http.ResponseWriter, r *htt
 	password := r.FormValue("UserPassword")
 	result, text := controllers.Service.UserService.ConfirmSignin(name, password)
 	if result == true {
-		u1, err := uuid.NewV4()
-		if err != nil {
-			controllers.ErrorHandler(w, http.StatusForbidden)
-			return
-		}
-		u2 := uuid.NewV3(u1, name).String()
-
+		// u1, err := uuid.NewV4()
+		// if err != nil {
+		// 	controllers.ErrorHandler(w, http.StatusForbidden)
+		// 	return
+		// }
+		// u2 := uuid.NewV3(u1, name).String()
+		u2 := pkg.GetToken()
 		controllers.Service.UserService.CreateSession(u2, name)
 
 		cookie := &http.Cookie{Name: "logged-in", Value: u2, Expires: time.Now().Add(365 * 24 * time.Hour), Path: "/"}

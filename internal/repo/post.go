@@ -49,6 +49,13 @@ func (db *PostDB) ShowPost() []models.Post {
 			log.Println("Error in ShowPost")
 			log.Fatal(err)
 		}
+		// fmt.Println("Title is", title)
+		// fmt.Println("text is", t)
+		// fmt.Println("Name is", n)
+		// fmt.Println("Category is", c)
+		// fmt.Println("Id is", i)
+		// fmt.Println("likes is", likes)
+		// fmt.Println("dislikes is", dislikes)
 
 		onepost := models.Post{
 			Title:    title,

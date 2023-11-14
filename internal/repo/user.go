@@ -26,17 +26,18 @@ func (UserDB *UserDB) AddUser(UserName string, Email string, hashedPassword stri
 }
 
 func (UserDB *UserDB) CreateSession(id string, name string) {
-	fmt.Println(id, name, "++++")
-
-	statement1, err := UserDB.DB.Prepare("INSERT INTO cookies (Id, lame) VALUES ($1, $2)")
+	fmt.Println(id)
+	fmt.Println(name)
+	stmt, err := UserDB.DB.Prepare("INSERT INTO cookies(Id, lame) VALUES(?, ?)")
 	if err != nil {
-		fmt.Println("ERR TUT")
 		log.Fatal(err)
 	}
+	defer stmt.Close()
 
-	_, err = statement1.Exec(id, name)
+	// Execute the SQL statement with the given parameters
+	_, err = stmt.Exec(id, name)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 }
 
