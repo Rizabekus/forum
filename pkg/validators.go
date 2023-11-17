@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"regexp"
+	"strings"
 )
 
 func PostChecker(title string, text string) (bool, string) {
@@ -20,4 +21,15 @@ func PostChecker(title string, text string) (bool, string) {
 func isEmailValid(e string) bool {
 	emailRegex := regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 	return emailRegex.MatchString(e)
+}
+
+func CommentChecker(text string) bool {
+	for strings.Contains(text, " ") {
+		text = strings.ReplaceAll(text, " ", "")
+	}
+	if text == "" {
+		return false
+	} else {
+		return true
+	}
 }

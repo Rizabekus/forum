@@ -44,6 +44,7 @@ func (controllers *Controllers) Homepage(w http.ResponseWriter, r *http.Request)
 	} else {
 
 		// if time.Now().After(cookie.Expires) {
+		// 	fmt.Println("GGG")
 		// 	controllers.Service.CookiesService.DeleteCookie(cookie.Value)
 
 		// 	cookie = &http.Cookie{

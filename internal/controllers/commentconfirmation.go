@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"forum/pkg"
 	"net/http"
 	"strconv"
 	"strings"
@@ -26,7 +27,11 @@ func (controllers *Controllers) CommentConfirmation(w http.ResponseWriter, r *ht
 	} else {
 		text := r.FormValue("comment")
 		previousURL := r.Header.Get("Referer")
-
+		res := pkg.CommentChecker(text)
+		if res == false {
+			http.Redirect(w, r, previousURL, 302)
+			return
+		}
 		xurl := strings.Split(previousURL, "id=")
 		if len(xurl) < 2 {
 			w.WriteHeader(http.StatusNotFound)
