@@ -3,7 +3,6 @@ package controllers
 import (
 	"net/http"
 	"text/template"
-	"time"
 )
 
 func (controllers *Controllers) Homepage(w http.ResponseWriter, r *http.Request) {
@@ -44,15 +43,15 @@ func (controllers *Controllers) Homepage(w http.ResponseWriter, r *http.Request)
 		return
 	} else {
 
-		if time.Now().After(cookie.Expires) {
-			controllers.Service.CookiesService.DeleteCookie(cookie.Value)
+		// if time.Now().After(cookie.Expires) {
+		// 	controllers.Service.CookiesService.DeleteCookie(cookie.Value)
 
-			cookie = &http.Cookie{
-				Name:  "logged-in",
-				Value: "not-logged",
-			}
+		// 	cookie = &http.Cookie{
+		// 		Name:  "logged-in",
+		// 		Value: "not-logged",
+		// 	}
 
-		}
+		// }
 
 		files := []string{
 			"./ui/html/user.home.tmpl",
